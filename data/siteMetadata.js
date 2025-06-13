@@ -7,7 +7,7 @@ const siteMetadata = {
     'Exploring the nuances of AI systems and deep learning architectures — one at a time.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://https://blog1-rohith-shinojs-projects.vercel.app',
+  siteUrl: 'https://blog1-rohith-shinojs-projects.vercel.app',
   siteRepo: 'https://github.com/Rohith-Shinoj/blog1',
   siteLogo: `public/static/favicons/favicon.ico`,
   // socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
