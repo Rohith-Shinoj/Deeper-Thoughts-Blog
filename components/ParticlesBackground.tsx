@@ -11,27 +11,30 @@ const ParticlesBackground = () => {
     setShow(true)
   }, [])
 
-  const options = useMemo(() => ({
-    fullScreen: { enable: false },
-    background: { color: 'transparent' },
-    particles: {
-      number: { value: 60 },
-      color: { value: '#06b6d4' },
-      links: { enable: true, color: '#67e8f9', distance: 100 },
-      move: { enable: true, speed: 0.8 },
-      size: { value: 2 },
-      opacity: { value: 0.5 },
-    },
-    interactivity: {
-      events: { onHover: { enable: true, mode: 'repulse' } },
-      modes: { repulse: { distance: 80 } },
-    },
-  }), [])
+  const options = useMemo(
+    () => ({
+      fullScreen: { enable: false },
+      background: { color: 'transparent' },
+      particles: {
+        number: { value: 60 },
+        color: { value: '#06b6d4' },
+        links: { enable: true, color: '#67e8f9', distance: 100 },
+        move: { enable: true, speed: 0.8 },
+        size: { value: 2 },
+        opacity: { value: 0.5 },
+      },
+      interactivity: {
+        events: { onHover: { enable: true, mode: 'repulse' } },
+        modes: { repulse: { distance: 80 } },
+      },
+    }),
+    []
+  )
 
   if (!show) return null
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full -z-10">
+    <div className="absolute top-0 left-0 -z-10 h-full w-full">
       <Particles id="tsparticles" options={options} />
     </div>
   )

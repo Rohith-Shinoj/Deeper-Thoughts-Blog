@@ -21,14 +21,8 @@ const Header = () => {
             <Logo />
           </div> */}
           <div className="mr-3">
-          <Image
-            src="/static/images/icon.png"
-            alt="Site Logo"
-            width={72}
-            height={72}
-            priority
-          />
-        </div>
+            <Image src="/static/images/icon.png" alt="Site Logo" width={72} height={72} priority />
+          </div>
 
           {typeof siteMetadata.headerTitle === 'string' ? (
             <div className="hidden h-6 text-2xl font-semibold sm:block">

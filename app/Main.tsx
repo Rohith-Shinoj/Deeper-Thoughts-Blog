@@ -11,26 +11,29 @@ export default function Home({ posts }) {
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-        <div className="space-y-4">
-      <h1 className="text-lg leading-7 font-bold tracking-tight text-gray-900 sm:text-xl sm:leading-10 md:text-2xl md:leading-14 dark:text-gray-100">
-        Welcome to DeepThoughts – A blog created to bridge the gap between code and cognition.
-      </h1>
-      {/* <p className="text-base text-gray-700 dark:text-gray-300">
+          <div className="space-y-4">
+            <h1 className="text-lg leading-7 font-bold tracking-tight text-gray-900 sm:text-xl sm:leading-10 md:text-2xl md:leading-14 dark:text-gray-100">
+              Welcome to DeepThoughts – A blog created to bridge the gap between code and cognition.
+            </h1>
+            {/* <p className="text-base text-gray-700 dark:text-gray-300">
         DeepThoughts is a space where technical curiosity meets thoughtful exploration. Here, I write about niche ideas in deep learning — from overlooked neural architectures to subtle quirks in training dynamics — with the goal of building a deeper understanding of the systems we often take for granted.
       </p> */}
-      <p className="text-base text-gray-700 dark:text-gray-300">
-        I’m Rohith Shinoj Kumar, a Research Engineer at the Centre for Development of Telematics (CDOT), Government of India, and a deep learning enthusiast with a passion for peeling back the layers of multimodal machine learning systems.
-        In a world of high-level abstractions, I’m driven by a desire to understand the why behind models — connecting theory to implementation. 
-        </p>
-      <p className="text-base text-gray-700 dark:text-gray-300">
-        This blog is my personal learning journal — and an open invitation to think deeper, explore further, and stay curious about the evolving world of AI.
-      </p>
-    </div>
+            <p className="text-base text-gray-700 dark:text-gray-300">
+              I’m Rohith Shinoj Kumar, a Research Engineer at the Centre for Development of
+              Telematics (CDOT), and a deep learning enthusiast with a passion for peeling back the
+              layers of multimodal machine learning systems. In a world of high-level abstractions,
+              I’m driven by a desire to understand the why behind models — connecting theory to
+              implementation.
+            </p>
+            <p className="text-base text-gray-700 dark:text-gray-300">
+              This blog is my personal learning journal — and an open invitation to think deeper,
+              explore further, and stay curious about the evolving landscapes of AI.
+            </p>
+          </div>
 
-
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
+          {/* <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
             {siteMetadata.description}
-          </p>
+          </p> */}
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
