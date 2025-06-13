@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://blog1-nu-two.vercel.app
+Host: https://deep-thoughts-blog.vercel.app
 
 # Sitemaps
-Sitemap: https://blog1-nu-two.vercel.app/sitemap.xml
+Sitemap: https://deep-thoughts-blog.vercel.app/sitemap.xml
