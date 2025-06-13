@@ -74,7 +74,7 @@ const siteMetadata = {
       metadata: '0',
       // theme example: light, dark, dark_dimmed, dark_high_contrast
       // transparent_dark, preferred_color_scheme, custom
-      theme: 'light',
+      theme: 'preferred_color_scheme',
       // theme when dark mode
       darkTheme: 'transparent_dark',
       // If the theme option above is set to 'custom`
@@ -85,6 +85,7 @@ const siteMetadata = {
       lang: 'en',
     },
   },
+
   search: {
     provider: 'kbar', // kbar or algolia
     kbarConfig: {

@@ -9,6 +9,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
+import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
@@ -107,10 +108,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} /> */}
             <Analytics />
             <SpeedInsights />
+
             <SectionContainer>
               <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
                 <Header />
                 <main className="mb-auto">{children}</main>
+                <ScrollTopAndComment />
               </SearchProvider>
               <Footer />
             </SectionContainer>
