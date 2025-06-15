@@ -2,5 +2,6 @@
   "llms": 1,
   "attention": 1,
   "nlp": 1,
-  "transformers": 1
+  "transformers": 1,
+  "genai": 1
 }

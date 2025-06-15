@@ -2,12 +2,12 @@
 const siteMetadata = {
   title: 'Deep Thoughts - Blog',
   author: 'Rohith Shinoj',
-  headerTitle: 'DeepThoughts',
+  headerTitle: 'DeeperThoughts',
   description:
     'Exploring the nuances of AI systems and deep learning architectures — one at a time.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://blog1-rohith-shinojs-projects.vercel.app',
+  siteUrl: 'https://deeper-thoughts.vercel.app',
   siteRepo: 'https://github.com/Rohith-Shinoj/blog1',
   siteLogo: `public/static/favicons/favicon.ico`,
   // socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
