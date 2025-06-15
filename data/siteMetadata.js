@@ -1,13 +1,13 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Deep Thoughts - Blog',
+  title: 'Deeper Thoughts - Blog',
   author: 'Rohith Shinoj',
   headerTitle: 'DeeperThoughts',
   description:
     'Exploring the nuances of AI systems and deep learning architectures — one at a time.',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://deeper-thoughts.vercel.app',
+  siteUrl: 'https://deeper-thoughts-blog.vercel.app',
   siteRepo: 'https://github.com/Rohith-Shinoj/blog1',
   siteLogo: `public/static/favicons/favicon.ico`,
   // socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,

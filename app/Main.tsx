@@ -13,8 +13,7 @@ export default function Home({ posts }) {
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
           <div className="space-y-4">
             <h1 className="text-lg leading-7 font-bold tracking-tight text-gray-900 sm:text-xl sm:leading-10 md:text-2xl md:leading-14 dark:text-gray-100">
-              Welcome to DeeperThoughts – A blog created to bridge the gap between code and
-              cognition.
+              Welcome to DeeperThoughts – A blog that bridges the gap between code and cognition.
             </h1>
             {/* <p className="text-base text-gray-700 dark:text-gray-300">
         DeeperThoughts is a space where technical curiosity meets thoughtful exploration. Here, I write about niche ideas in deep learning — from overlooked neural architectures to subtle quirks in training dynamics — with the goal of building a deeper understanding of the systems we often take for granted.
