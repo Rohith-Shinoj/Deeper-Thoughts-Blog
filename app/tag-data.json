@@ -1,10 +1,10 @@
 {
-  "gan": 1,
-  "cnns": 1,
-  "computer-vision": 1,
-  "genai": 2,
   "llms": 1,
   "attention": 1,
   "nlp": 1,
-  "transformers": 1
+  "transformers": 1,
+  "generative-ai": 2,
+  "gan": 1,
+  "cnns": 1,
+  "computer-vision": 1
 }

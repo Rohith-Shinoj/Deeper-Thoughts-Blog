@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://deeper-thoughts-blog.vercel.app
+Host: https://www.deeper-thoughts-blog.rohithshinoj.com
 
 # Sitemaps
-Sitemap: https://deeper-thoughts-blog.vercel.app/sitemap.xml
+Sitemap: https://www.deeper-thoughts-blog.rohithshinoj.com/sitemap.xml
