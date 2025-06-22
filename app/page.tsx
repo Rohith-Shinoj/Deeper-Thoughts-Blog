@@ -49,7 +49,6 @@ export default async function Page() {
           }}
         />
 
-        {/* Structured data for Organization (optional) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -57,8 +56,8 @@ export default async function Page() {
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'Deeper Thoughts',
-              url: 'https://deeper-thoughts-blog.rohithshinoj.com',
-              logo: 'https://deeper-thoughts-blog.rohithshinoj.com/logo.png',
+              url: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
+              logo: 'https://www.deeper-thoughts-blog.rohithshinoj.com/logo.png',
             }),
           }}
         />

@@ -1,9 +1,12 @@
 {
-  "llms": 1,
+  "llms": 2,
   "attention": 1,
   "nlp": 1,
   "transformers": 1,
-  "generative-ai": 2,
+  "generative-ai": 3,
+  "scaling-laws": 1,
+  "optimization": 1,
+  "ai-efficiency": 1,
   "gan": 1,
   "cnns": 1,
   "computer-vision": 1
