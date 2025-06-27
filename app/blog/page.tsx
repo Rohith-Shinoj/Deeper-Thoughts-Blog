@@ -5,7 +5,20 @@ import ListLayout from '@/layouts/ListLayoutWithTags'
 
 const POSTS_PER_PAGE = 5
 
-export const metadata = genPageMetadata({ title: 'Blog' })
+export const metadata = genPageMetadata({
+  title: 'Blog',
+  description:
+    'Explore in-depth articles on AI, deep learning, transformers, and machine learning research. Latest insights on neural networks, attention mechanisms, and AI interpretability.',
+  keywords: [
+    'AI blog',
+    'deep learning articles',
+    'machine learning research',
+    'transformer models',
+    'neural networks',
+    'AI tutorials',
+  ],
+  pathname: '/blog',
+})
 
 export default async function BlogPage(props: { searchParams: Promise<{ page: string }> }) {
   const posts = allCoreContent(sortPosts(allBlogs))

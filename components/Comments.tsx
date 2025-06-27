@@ -1,22 +1,32 @@
 'use client'
 
 import { Comments as CommentsComponent } from 'pliny/comments'
-import { useState } from 'react'
 import siteMetadata from '@/data/siteMetadata'
+import { useTheme } from 'next-themes'
 
 export default function Comments({ slug }: { slug: string }) {
-  const [loadComments, setLoadComments] = useState(false)
+  const { resolvedTheme } = useTheme()
 
   if (!siteMetadata.comments?.provider) {
     return null
   }
-  return (
-    <>
-      {loadComments ? (
-        <CommentsComponent commentsConfig={siteMetadata.comments} slug={slug} />
-      ) : (
-        <button onClick={() => setLoadComments(true)}>Load Comments</button>
-      )}
-    </>
-  )
+
+  let commentsConfig = siteMetadata.comments
+
+  // Only override theme if provider is giscus
+  if (siteMetadata.comments.provider === 'giscus') {
+    let giscusTheme = 'light'
+    if (resolvedTheme === 'dark') {
+      giscusTheme = 'transparent_dark'
+    }
+    commentsConfig = {
+      ...siteMetadata.comments,
+      giscusConfig: {
+        ...siteMetadata.comments.giscusConfig,
+        theme: giscusTheme,
+      },
+    }
+  }
+
+  return <CommentsComponent commentsConfig={commentsConfig} slug={slug} />
 }

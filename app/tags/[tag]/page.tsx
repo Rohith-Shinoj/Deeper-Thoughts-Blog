@@ -17,10 +17,10 @@ export async function generateMetadata(props: {
   return genPageMetadata({
     title: tag,
     description: `${siteMetadata.title} ${tag} tagged content`,
+    pathname: `/tags/${slug(tag)}`,
     alternates: {
-      canonical: './',
       types: {
-        'application/rss+xml': `${siteMetadata.siteUrl}/tags/${tag}/feed.xml`,
+        'application/rss+xml': `${siteMetadata.siteUrl}/tags/${slug(tag)}/feed.xml`,
       },
     },
   })

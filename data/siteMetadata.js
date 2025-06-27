@@ -1,16 +1,16 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Deeper Thoughts - Blog',
-  author: 'Rohith Shinoj',
+  title: 'DeeperThoughts - AI & Deep Learning Blog',
+  author: 'Rohith Shinoj Kumar',
   headerTitle: 'DeeperThoughts',
   description:
-    'Exploring the nuances of AI systems and deep learning architectures — one at a time.',
+    'Explore the latest advances in AI systems, deep learning architectures, and machine learning research. In-depth analysis of transformers, attention mechanisms, and neural network interpretability.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
   siteRepo: 'https://www.github.com/Rohith-Shinoj/blog1',
   siteLogo: `public/static/favicons/favicon.ico`,
-  // socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
+  socialBanner: `${process.env.BASE_PATH || ''}/static/images/social-preview.png`,
   // mastodon: 'https://mastodon.social/@mastodonuser',
   email: 'rohithshinoj@gmail.com',
   github: 'https://www.github.com/Rohith-Shinoj',
