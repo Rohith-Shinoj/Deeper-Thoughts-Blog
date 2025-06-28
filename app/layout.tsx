@@ -93,7 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <head>
-        <link
+        {/* <link
           rel="apple-touch-icon"
           sizes="180x180"
           href={`${basePath}/static/favicons/apple-touch-icon.png`}
@@ -110,14 +110,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           sizes="16x16"
           href={`${basePath}/static/favicons/favicon-16x16.png`}
         />
+        <link rel="manifest" href="/site.webmanifest" /> */}
+
+        <link
+          rel="icon"
+          type="image/png"
+          href={`${basePath}/static/favicons/favicon-96x96.png`}
+          sizes="96x96"
+        />
+        <link rel="icon" type="image/svg+xml" href={`${basePath}/static/favicons/favicon.svg`} />
+        <link rel="shortcut icon" href={`${basePath}/static/favicons/favicon.ico`} />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href={`${basePath}/static/favicons/apple-touch-icon.png`}
+        />
+        <meta name="apple-mobile-web-app-title" content="Deeper Thoughts" />
         <link rel="manifest" href="/site.webmanifest" />
+
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content={siteMetadata.title} />
-        <meta name="mobile-web-app-capable" content="yes" />
+        {/* <meta name="apple-mobile-web-app-title" content={siteMetadata.title} /> */}
+        {/* <meta name="mobile-web-app-capable" content="yes" /> */}
         <meta
           name="google-site-verification"
           content="Y30rOgmn0prJFAn0sMmt0yNVLdipiySeM0B3Uwk71bo"

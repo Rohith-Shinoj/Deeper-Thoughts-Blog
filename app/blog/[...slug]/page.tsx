@@ -96,13 +96,26 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
     return coreContent(authorResults as Authors)
   })
   const mainContent = coreContent(post)
-  const jsonLd = post.structuredData
-  jsonLd['author'] = authorDetails.map((author) => {
-    return {
-      '@type': 'Person',
-      name: author.name,
-    }
-  })
+  const jsonLd = { ...post.structuredData }
+  // If authorDetails exist, build a richer author array for JSON-LD
+  if (Array.isArray(authorDetails) && authorDetails.length > 0) {
+    jsonLd.author = authorDetails.map((author) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const authorObj: { [key: string]: any } = {
+        '@type': 'Person',
+        name: author.name,
+      }
+      if (author.avatar) {
+        authorObj.image = siteMetadata.siteUrl + author.avatar
+      }
+      if (author.github) {
+        authorObj.url = author.github
+      } else if (author.linkedin) {
+        authorObj.url = author.linkedin
+      }
+      return authorObj
+    })
+  }
 
   const Layout = layouts[post.layout || defaultLayout]
 

@@ -114,16 +114,36 @@ export const Blog = defineDocumentType(() => ({
     ...computedFields,
     structuredData: {
       type: 'json',
-      resolve: (doc) => ({
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: doc.title,
-        datePublished: doc.date,
-        dateModified: doc.lastmod || doc.date,
-        description: doc.summary,
-        image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
-        url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
-      }),
+      resolve: (doc) => {
+        // Only use author name from frontmatter or siteMetadata
+        const authorObj = {
+          '@type': 'Person',
+          name: doc.authors && doc.authors.length > 0 ? doc.authors[0] : siteMetadata.author,
+        }
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: doc.title,
+          datePublished: doc.date,
+          dateModified: doc.lastmod || doc.date,
+          description: doc.summary,
+          image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
+          url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': doc.canonicalUrl || `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+          },
+          author: authorObj,
+          publisher: {
+            '@type': 'Organization',
+            name: siteMetadata.title,
+            logo: {
+              '@type': 'ImageObject',
+              url: siteMetadata.siteUrl + '/static/favicons/favicon-96x96.png',
+            },
+          },
+        }
+      },
     },
   },
 }))

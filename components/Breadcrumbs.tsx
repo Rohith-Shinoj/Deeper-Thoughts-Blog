@@ -1,7 +1,7 @@
 import Link from '@/components/Link'
 
 interface BreadcrumbItem {
-  label: string
+  name: string
   href?: string
 }
 
@@ -10,39 +10,40 @@ interface BreadcrumbsProps {
 }
 
 export default function Breadcrumbs({ items }: BreadcrumbsProps) {
-  if (items.length <= 1) {
-    return null
+  if (!items || items.length < 2) return null
+
+  // Structured data for SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: item.name,
+      item: item.href || '',
+    })),
   }
 
   return (
-    <nav className="mb-4" aria-label="Breadcrumb">
-      <ol className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-        {items.map((item, index) => (
-          <li key={index} className="flex items-center">
-            {index > 0 && (
-              <svg
-                className="mx-2 h-4 w-4"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
-            {item.href ? (
+    <nav aria-label="Breadcrumb" className="mb-4">
+      <ol className="flex flex-wrap items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+        {items.map((item, idx) => (
+          <li key={idx} className="flex items-center">
+            {idx > 0 && <span className="mx-2">/</span>}
+            {item.href && idx !== items.length - 1 ? (
               <Link href={item.href} className="hover:text-primary-500 dark:hover:text-primary-400">
-                {item.label}
+                {item.name}
               </Link>
             ) : (
-              <span className="text-gray-900 dark:text-gray-100">{item.label}</span>
+              <span className="font-semibold text-gray-900 dark:text-gray-100">{item.name}</span>
             )}
           </li>
         ))}
       </ol>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </nav>
   )
 }
