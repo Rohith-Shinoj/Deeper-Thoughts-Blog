@@ -33,37 +33,37 @@ export default function RelatedPosts({ currentPost, allPosts, maxPosts = 3 }: Re
 
   return (
     <section
-      className="mt-8 border-t border-gray-200 pt-8 dark:border-gray-700"
+      className="mt-4 border-t border-gray-700 pt-6 dark:border-gray-700"
       aria-labelledby="related-posts-heading"
     >
       <h2
         id="related-posts-heading"
-        className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100"
+        className="mb-8 text-xl font-bold tracking-tight text-gray-100"
       >
         Related Articles
       </h2>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
         {relatedPosts.map((post) => (
           <article
             key={post.slug}
-            className="rounded-lg border border-gray-200 p-4 dark:border-gray-700"
+            className="hover:shadow-3xl hover:border-primary-500 flex min-h-[180px] flex-col gap-2 rounded-xl border border-gray-700 bg-gray-900 p-5 transition-all duration-200"
           >
-            <h3 className="mb-2 text-lg font-semibold">
+            <h3 className="mb-1 text-base leading-tight font-semibold">
               <Link
                 href={`/blog/${post.slug}`}
-                className="hover:text-primary-500 dark:hover:text-primary-400 text-gray-900 dark:text-gray-100"
+                className="hover:text-primary-400 text-gray-100 underline underline-offset-2"
               >
                 {post.title}
               </Link>
             </h3>
-            <p className="mb-2 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mb-1 line-clamp-4 text-xs text-gray-400">
               {post.summary?.substring(0, 120)}...
             </p>
-            <div className="flex flex-wrap gap-1">
+            <div className="mt-auto flex flex-wrap gap-1">
               {post.sharedTags?.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
-                  className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 rounded px-2 py-1 text-xs"
+                  className="bg-primary-900 text-primary-200 rounded px-2 py-0.5 text-[10px] font-medium"
                 >
                   {tag}
                 </span>

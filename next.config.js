@@ -14,7 +14,7 @@ const ContentSecurityPolicy = `
   img-src * blob: data:;
   media-src *.s3.amazonaws.com;
   connect-src * www.google-analytics.com;
-  font-src 'self';
+  font-src 'self' fonts.googleapis.com fonts.gstatic.com;
   frame-src giscus.app
 `
 

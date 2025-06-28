@@ -5,7 +5,7 @@ lastmod: '2025-06-10'
 tags: ['LLMs', 'Attention', 'NLP', 'Transformers', 'Generative AI']
 draft: false
 summary: 'New capabilities of Large Language Models like GPT, LLaMA, Claude, and Grok are emerging almost every day, and at the heart of these powerful models lies the multi-head self-attention mechanism—the secret behind their impressive reasoning and language skills. This article takes a closer look at how these attention heads work together under the hood to create the tools we rely on and admire today.'
-images: ['/static/images/icon.png']
+images: ['/static/images/blog1/Attention.png']
 ---
 
 ## Introduction
@@ -20,7 +20,7 @@ _(If you are already familiar with Transformer architectures, feel free to skip 
 
 <TOCInline toc={props.toc} exclude="Introduction" />
 
-## When Did Language Models Get So “Large”?
+## When Did Language Models Get So "Large"?
 
 Language models are far from new. In fact, the use of language models dates back decades, with early systems relying heavily on recurrent neural networks (RNNs) to process sequential data like text. RNNs were designed to handle sequences by maintaining a hidden state that carried information from previous words, making them natural candidates for language tasks.
 
@@ -36,9 +36,9 @@ The Transformer architecture, introduced in the 2017 paper _Attention Is All You
 
 The Transformer flipped this approach entirely by introducing self-attention, a mechanism that allows the model to consider all words in a sentence at once. Rather than passing information from one word to the next step-by-step, the Transformer scans the entire input sequence in parallel and calculates how much attention each word should pay to every other word.
 
-Hard to wrap your head around? Let’s consider the sentence:
+Hard to wrap your head around? Let's consider the sentence:
 
-_“The trophy didn’t fit in the suitcase because it was too small.”_
+_"The trophy didn't fit in the suitcase because it was too small."_
 
 Now, ask yourself: What does "it" refer to? If you are a human (hopefully, because I was too lazy for CAPTCHA on this blog), you would quickly infer that it = the suitcase, was too small and not the trophy.
 
@@ -48,47 +48,47 @@ An RNN reads the sentence one word at a time, updating its internal state as it 
 
 "The" → "trophy" → "didn't" → "fit" → "in" → ...
 
-Each word modifies the RNN’s hidden state, which carries forward some memory of what came before. But by the time it reaches the word _"it_, the information about "trophy" and "suitcase" might be diluted or forgotten. Mathematically speaking, the _influence_ or percieved importance of the word trophy is negligibly small by the time the model has reached the word _"it"_.
+Each word modifies the RNN's hidden state, which carries forward some memory of what came before. But by the time it reaches the word _"it_, the information about "trophy" and "suitcase" might be diluted or forgotten. Mathematically speaking, the _influence_ or percieved importance of the word trophy is negligibly small by the time the model has reached the word _"it"_.
 
-In contrast, Transformers process the entire sentence in parallel using _self-attention_, which means that when the model encounters the word “it”, it doesn’t just rely on the last few words—it looks back at every word in the sentence and asks: How relevant is this word to understanding “it”? At this point, the model may assign a softmax attention weight of lets say, 0.63 to the word "suitcase" and 0.3 (still relatively high in comparison to other words, but far lower than 0.63) to the word "trophy" because the phrase “too small” makes more semantic sense in relation to a suitcase than a trophy. In a way, this is exactly how the human brain thinks about this sentence, only with a touch of mathematics.
+In contrast, Transformers process the entire sentence in parallel using _self-attention_, which means that when the model encounters the word "it", it doesn't just rely on the last few words—it looks back at every word in the sentence and asks: How relevant is this word to understanding "it"? At this point, the model may assign a softmax attention weight of lets say, 0.63 to the word "suitcase" and 0.3 (still relatively high in comparison to other words, but far lower than 0.63) to the word "trophy" because the phrase "too small" makes more semantic sense in relation to a suitcase than a trophy. In a way, this is exactly how the human brain thinks about this sentence, only with a touch of mathematics.
 
 ## Attention Heads and Multi-Head Attention
 
 Attention Heads are the foundational blocks of Transofrmer models in the same way bricks are to a wall. In its simplest form, each head decides which words in a sequence should pay attention to which other words. Each head thus performs its own version of:
 
-“How much should token A care about token B?”
+"How much should token A care about token B?"
 
 It takes a bunch of tokens and converts them into vector embeddings. Each head then computes attention scores—usually through the well-known Query, Key, and Value mechanism. Based on these scores, it blends information from other tokens into a context-aware representation of each word. Now, depending on how the attention mechanism is configured, Transformer models can be built using encoder-only, decoder-only, or encoder–decoder architectures.
 
 ![Attention models](/static/images/blog1/Attention.png)
 
-**Encoder-only** models like _BERT_ and _RoBERTa_ use bidirectional self-attention, meaning each word can attend to all others in the input—great for tasks like classification or question answering. **Decoder-only** models like _GPT, Claude, and LLaMA_ use causal (unidirectional) self-attention, where each word only attends to the ones before it, making them ideal for text generation. Finally, **encoder–decoder models** like _T5, BART, and MarianMT_ combine both: the encoder reads the entire input using bidirectional attention, and the decoder generates output using causal self-attention while also attending to the encoder’s output via cross-attention—a powerful setup for tasks like translation or summarization.
+**Encoder-only** models like _BERT_ and _RoBERTa_ use bidirectional self-attention, meaning each word can attend to all others in the input—great for tasks like classification or question answering. **Decoder-only** models like _GPT, Claude, and LLaMA_ use causal (unidirectional) self-attention, where each word only attends to the ones before it, making them ideal for text generation. Finally, **encoder–decoder models** like _T5, BART, and MarianMT_ combine both: the encoder reads the entire input using bidirectional attention, and the decoder generates output using causal self-attention while also attending to the encoder's output via cross-attention—a powerful setup for tasks like translation or summarization.
 
 ### One Head or Many? The Power of Multi-Head Attention
 
 Language is complex. Consider the phrase:
 
-“I saw the man with my binoculars. He was walking across the street.”
+"I saw the man with my binoculars. He was walking across the street."
 
 At first glance, it seems simple, but it can mean two very different things—did I use my binoculars to see the man, or does the man have my binoculars? Even humans get confused here, because the meaning changes entirely depending on how you interpret the syntax and context. How do we then expect a bunch of code and mathematics to interpret what we as (supposedly) superior beings get confused at.
 
-Transformers don’t just rely on one attention head—they unleash a whole team working in parallel. Take GPT-3, for instance: it wields 96 attention heads, each zooming in on different clues in the text. GPT-4 cranks this up even more, packing in a larger number of heads to capture subtler nuances and deeper connections. This multi-head approach lets the model juggle syntax, meaning, and context all at once, blending these “mini-experts” into a larger unit that understands language with impressive depth and flexibility.
+Transformers don't just rely on one attention head—they unleash a whole team working in parallel. Take GPT-3, for instance: it wields 96 attention heads, each zooming in on different clues in the text. GPT-4 cranks this up even more, packing in a larger number of heads to capture subtler nuances and deeper connections. This multi-head approach lets the model juggle syntax, meaning, and context all at once, blending these "mini-experts" into a larger unit that understands language with impressive depth and flexibility.
 
-Sounds easy, right? “We have one that works, so why not add more? It should obviously work better!” But the reality is far more complex. Let’s take a deeper dive—albeit a very simplified one—into how multiple attention heads help models make sense of these subtle linguistic nuances.
+Sounds easy, right? "We have one that works, so why not add more? It should obviously work better!" But the reality is far more complex. Let's take a deeper dive—albeit a very simplified one—into how multiple attention heads help models make sense of these subtle linguistic nuances.
 
 ## Mechnistic Interpretability: What are these heads really learning?
 
-One can guess, without loss of generality, that each head has a specific task that is later integrated across units. The more important question to be asked here is, are they just inscrutable black boxes that magically “understand” language by combining examples—or are there more concrete, interpretable mechanisms at play?
+One can guess, without loss of generality, that each head has a specific task that is later integrated across units. The more important question to be asked here is, are they just inscrutable black boxes that magically "understand" language by combining examples—or are there more concrete, interpretable mechanisms at play?
 
 Simply put, each of these units focus on one very elementary task that makes little meaning when isolated but integrate to every nuance of language. These include but are not limited to:
 
 ### 1. Syntactic/Grammar Parsers
 
-Some attention heads act like internal parsers. They focus solely on syntactic structures—linking subjects to verbs and maintaining grammatical agreement. For example, in GPT-like models, specific heads have been found that track subject–verb number agreement. When the sentence says “The dogs…”, one head ensures the verb is plural (“bark”), not singular (“barks”).
+Some attention heads act like internal parsers. They focus solely on syntactic structures—linking subjects to verbs and maintaining grammatical agreement. For example, in GPT-like models, specific heads have been found that track subject–verb number agreement. When the sentence says "The dogs…", one head ensures the verb is plural ("bark"), not singular ("barks").
 
 ![Interpretation of grammar in LLMs](/static/images/blog1/grammar.png)
 
-The figure above, derived from the paper _'A Multiscale Visualization of Attention in the Transformer Model'_ by Vig et. al tracks lexical patterns in Pythia/GPT heads in GPT-2. Each panel plots one head’s attention (colored lines) for an input sentence. The left head (layer 8) copies each list item to itself (“apples, oranges, bananas”); the center head (layer 3) couples verbs (“ran”, “barked”); the right head (layer 10) connects letters of the acronym “ASA”.
+The figure above, derived from the paper _'A Multiscale Visualization of Attention in the Transformer Model'_ by Vig et. al tracks lexical patterns in Pythia/GPT heads in GPT-2. Each panel plots one head's attention (colored lines) for an input sentence. The left head (layer 8) copies each list item to itself ("apples, oranges, bananas"); the center head (layer 3) couples verbs ("ran", "barked"); the right head (layer 10) connects letters of the acronym "ASA".
 
 Other heads follow sentence flow, identifying list structures, acronyms, or verbs—like internal pattern matchers that give structure to otherwise flat sequences of tokens.
 
@@ -96,28 +96,28 @@ Other heads follow sentence flow, identifying list structures, acronyms, or verb
 
 Another discovery was the _Induction Circuit heads_-—a mini-program embedded in multiple attention heads that learns to detect and repeat token patterns For example, if a prompt says
 
-“Alice, Bob, Alice”
+"Alice, Bob, Alice"
 
-the model learns to predict “Bob” next—not because it understands names, but because induction heads matched the repeated “Alice” and inferred the paired continuation. Most intriguingly, this mechanism is surprisingly algorithmic-kind of like a for loop written in neural weights
+the model learns to predict "Bob" next—not because it understands names, but because induction heads matched the repeated "Alice" and inferred the paired continuation. Most intriguingly, this mechanism is surprisingly algorithmic-kind of like a for loop written in neural weights
 
 ### 3. Entity Tracking Heads
 
-Known as _Name Moves_ or _Coreference Heads_, these specialize in tracking entities across long passages. For example, in a sentence like “The nurse saw the patient. She took notes.” it is these heads that understand “She” refers to the nurse.
+Known as _Name Moves_ or _Coreference Heads_, these specialize in tracking entities across long passages. For example, in a sentence like "The nurse saw the patient. She took notes." it is these heads that understand "She" refers to the nurse.
 
 Interestingly, there are even inhibition heads that block attention to incorrect entities. For example, if two names are mentioned, these heads actively prevent the model from choosing the wrong one.
 
 ### 4. Indirect Object Identification (IoI) tasks
 
-Recent studies have identified a circuit of 26 heads (out of 144) implementing the simple algorithm: “find all names, remove duplicates, output the leftover name”. These heads branch into other functional classes, where each head performs a sub-task: detecting duplication, suppressing confusion, and finally copying the correct name to the output.
+Recent studies have identified a circuit of 26 heads (out of 144) implementing the simple algorithm: "find all names, remove duplicates, output the leftover name". These heads branch into other functional classes, where each head performs a sub-task: detecting duplication, suppressing confusion, and finally copying the correct name to the output.
 ![Indirect Object Identification in LLMs](/static/images/blog1/IoI.png)
 For example, in the sentence "Alice recieved the notes sent by Bob and Alice completed the assignment", these heads flag repeated tokens (Alice) and steer the model toward the relevant instance.
 
 ### 5. Redundant Circuits
 
-It is deeply rooted in human nature to sense a chance of failure and come up with backup ideas-the philosophy of _There's always a Plan-B_. It may turn out that this is, infact, not a human emotion at all. Transformer models often contain multiple redundant circuits: units that perform the same task in different ways. If one fails or is ablated (washed out), others take over. This reveals a robust, distributed architecture. Heads aren’t just independent filters—they form interconnected webs that back each other up like a neural fallback system.
+It is deeply rooted in human nature to sense a chance of failure and come up with backup ideas-the philosophy of _There's always a Plan-B_. It may turn out that this is, infact, not a human emotion at all. Transformer models often contain multiple redundant circuits: units that perform the same task in different ways. If one fails or is ablated (washed out), others take over. This reveals a robust, distributed architecture. Heads aren't just independent filters—they form interconnected webs that back each other up like a neural fallback system.
 
 ## The Limits of Knowing
 
-While we’ve explored the many roles multi-head attention units can play, it’s important to note that these interpretations are simplifications. Interpretability remains one of the most difficult and nuanced challenges in deep learning. Some heads don’t even deal with language in the usual sense. In models like Code LLaMA, certain heads act more like _inbuilt calculators_—performing transformations on internal vectors, rather than extracting linguistic meaning.
+While we've explored the many roles multi-head attention units can play, it's important to note that these interpretations are simplifications. Interpretability remains one of the most difficult and nuanced challenges in deep learning. Some heads don't even deal with language in the usual sense. In models like Code LLaMA, certain heads act more like _inbuilt calculators_—performing transformations on internal vectors, rather than extracting linguistic meaning.
 
-Broadly speaking, not every head is a language expert—some are internal calculators, some may be silent orchestrators, and others might just be ghosts—present, but whose purpose we’ve yet to decipher. **We may never fully understand what all attention heads do in large models, and thats okay!**. Nonetheless, it would not be possible to optimize these models without understanding what happens in the black-box we call AI, and this becomes even harder as language models become larger and increasingly multimodal-able to see, hear, and reason across domains.
+Broadly speaking, not every head is a language expert—some are internal calculators, some may be silent orchestrators, and others might just be ghosts—present, but whose purpose we've yet to decipher. **We may never fully understand what all attention heads do in large models, and thats okay!**. Nonetheless, it would not be possible to optimize these models without understanding what happens in the black-box we call AI, and this becomes even harder as language models become larger and increasingly multimodal-able to see, hear, and reason across domains.
