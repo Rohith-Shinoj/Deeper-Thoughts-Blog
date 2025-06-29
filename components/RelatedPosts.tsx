@@ -9,11 +9,9 @@ interface RelatedPostsProps {
 }
 
 export default function RelatedPosts({ currentPost, allPosts, maxPosts = 3 }: RelatedPostsProps) {
-  // Find related posts based on tags and title similarity
   const relatedPosts = allPosts
     .filter((post) => post.slug !== currentPost.slug)
     .map((post) => {
-      // Calculate similarity score based on shared tags
       const sharedTags = currentPost.tags?.filter((tag) => post.tags?.includes(tag)) || []
       const similarityScore = sharedTags.length
 
@@ -42,11 +40,11 @@ export default function RelatedPosts({ currentPost, allPosts, maxPosts = 3 }: Re
       >
         Related Articles
       </h2>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {relatedPosts.map((post) => (
           <article
             key={post.slug}
-            className="hover:shadow-3xl hover:border-primary-500 flex min-h-[180px] flex-col gap-2 rounded-xl border border-gray-700 bg-gray-900 p-5 transition-all duration-200"
+            className="hover:shadow-3xl hover:border-primary-500 flex min-h-[180px] flex-col gap-1 rounded-xl border border-gray-700 bg-gray-900 p-2 transition-all duration-200"
           >
             <h3 className="mb-1 text-base leading-tight font-semibold">
               <Link
@@ -56,9 +54,9 @@ export default function RelatedPosts({ currentPost, allPosts, maxPosts = 3 }: Re
                 {post.title}
               </Link>
             </h3>
-            <p className="mb-1 line-clamp-4 text-xs text-gray-400">
+            {/* <p className="mb-1 line-clamp-4 text-xs text-gray-400">
               {post.summary?.substring(0, 120)}...
-            </p>
+            </p> */}
             <div className="mt-auto flex flex-wrap gap-1">
               {post.sharedTags?.slice(0, 2).map((tag) => (
                 <span

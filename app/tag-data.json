@@ -1,13 +1,15 @@
 {
-  "llms": 2,
+  "llms": 3,
   "attention": 1,
-  "nlp": 1,
+  "nlp": 2,
   "transformers": 1,
-  "generative-ai": 3,
-  "scaling-laws": 1,
-  "optimization": 1,
-  "ai-efficiency": 1,
+  "generative-ai": 4,
   "gan": 1,
   "cnns": 1,
-  "computer-vision": 1
+  "computer-vision": 1,
+  "ai-in-software": 1,
+  "developer-tools": 1,
+  "scaling-laws": 1,
+  "optimization": 1,
+  "ai-efficiency": 1
 }

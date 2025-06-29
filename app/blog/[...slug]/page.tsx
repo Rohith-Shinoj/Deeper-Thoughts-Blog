@@ -122,6 +122,7 @@ export default async function Page(props: { params: Promise<{ slug: string[] }> 
 
   return (
     <>
+      <link rel="canonical" href={`${siteMetadata.siteUrl}/blog/${slug}`} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

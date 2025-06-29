@@ -17,7 +17,7 @@ export default function Home({ posts }) {
             </h1>
             <p className="text-base text-gray-700 dark:text-gray-300">
               I'm Rohith Shinoj Kumar, a Research Engineer at the Centre for Development of
-              Telematics (CDOT), and a deep learning enthusiast with a passion for peeling back the
+              Telematics (C-DOT), and a deep learning enthusiast with a passion for peeling back the
               layers of multimodal machine learning systems. In a world of high-level abstractions,
               I'm driven by a desire to understand the why behind models — connecting theory to
               implementation.
