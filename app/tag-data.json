@@ -1,5 +1,5 @@
 {
-  "llms": 3,
+  "llms": 4,
   "attention": 2,
   "nlp": 2,
   "transformers": 1,
@@ -8,10 +8,12 @@
   "gan": 1,
   "cnns": 1,
   "computer-vision": 2,
+  "optimization": 2,
+  "llmops": 1,
+  "ai-security": 1,
+  "developer-tools": 2,
   "ai-in-software": 1,
-  "developer-tools": 1,
   "scaling-laws": 1,
-  "optimization": 1,
   "ai-efficiency": 1,
   "vit": 1
 }

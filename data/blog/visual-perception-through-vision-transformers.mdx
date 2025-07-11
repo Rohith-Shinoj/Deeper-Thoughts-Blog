@@ -5,11 +5,8 @@ lastmod: '2025-07-06'
 tags: ['Generative-AI', 'ViT', 'Computer Vision', 'Attention', 'Interpretability']
 draft: false
 summary: 'Vision Transformers (ViTs) have transformed the way machines process and understand images, replacing convolutions with self-attention. At the heart of this shift lies the question: how do these models “see”? This article explores the internal workings of ViTs, focusing on attention heads, patch embeddings, and interpretability techniques that help us decode how these models perceive the visual world.'
-images: ['/static/images/blog2/ViT-Attention.png']
 thumbnail: /static/images/blog5/thumbnail.png
 ---
-
-## Introduction
 
 In recent years, computer vision has seen a paradigm shift. Instead of using only convolutions, many state-of-the-art models now treat images like sequences of “words” by applying Transformers to patches. Vision Transformers (ViTs) split an image (e.g. 224×224) into a grid of fixed-size patches (commonly 16×16 pixels), flatten them, and linearly embed each patch into a token vector. This is akin to reading an image as a sentence of patch-tokens.
 
