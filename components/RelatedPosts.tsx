@@ -49,7 +49,7 @@ export default function RelatedPosts({ currentPost, allPosts, maxPosts = 3 }: Re
             <h3 className="mb-1 text-base leading-tight font-semibold">
               <Link
                 href={`/blog/${post.slug}`}
-                className="hover:text-primary-400 text-gray-100 underline underline-offset-2"
+                className="hover:text-primary-400 text-gray-100 no-underline" // underline underline-offset-2"
               >
                 {post.title}
               </Link>

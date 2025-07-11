@@ -29,7 +29,7 @@ export default async function Page() {
         <meta name="twitter:title" content="Deeper Thoughts – AI & Deep Learning Blog" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://www.deeper-thoughts-blog.rohithshinoj.com" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="static/favicons/favicon.ico" />
 
         <script
           type="application/ld+json"

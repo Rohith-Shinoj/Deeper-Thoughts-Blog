@@ -1,0 +1,91 @@
+---
+title: 'Visual Perception through Vision Transformers'
+date: '2025-07-06'
+lastmod: '2025-07-06'
+tags: ['Generative-AI', 'ViT', 'Computer Vision', 'Attention', 'Interpretability']
+draft: false
+summary: 'Vision Transformers (ViTs) have transformed the way machines process and understand images, replacing convolutions with self-attention. At the heart of this shift lies the question: how do these models “see”? This article explores the internal workings of ViTs, focusing on attention heads, patch embeddings, and interpretability techniques that help us decode how these models perceive the visual world.'
+images: ['/static/images/blog2/ViT-Attention.png']
+---
+
+## Introduction
+
+In recent years, computer vision has seen a paradigm shift. Instead of using only convolutions, many state-of-the-art models now treat images like sequences of “words” by applying Transformers to patches. Vision Transformers (ViTs) split an image (e.g. 224×224) into a grid of fixed-size patches (commonly 16×16 pixels), flatten them, and linearly embed each patch into a token vector. This is akin to reading an image as a sentence of patch-tokens.
+
+Crucially, ViTs rely much less on built-in image biases: unlike CNNs with hardwired local filters, a ViT must learn spatial locality and translation-invariance from data. Empirical studies suggest this can pay off – ViTs often surpass CNNs in accuracy on large-scale benchmarks and even exhibit a stronger “shape bias” more aligned with human vision.
+
+<TOCInline toc={props.toc} exclude="Introduction" />
+
+## From Pixels to Patches: The ViT Architecture
+
+Vision Transformers start by tokenizing the image. For example, a 224×224 image can be divided into 14×14 = 196 non-overlapping patches of size 16×16. Each patch is flattened into a vector and projected by a learnable linear layer into an embedding space. Crucially, a special [CLS] token is prepended to this sequence of patch embeddings – this learnable token will aggregate information from all patches and serve as the image-level feature. Positional embeddings are added so the model knows each patch’s location so that the transformer can infer order.
+
+![Vision Transformer Architecture](/static/images/blog5/VIT.png)
+
+Once embedded, the patch tokens (and [CLS] token) are fed through a stack of standard transformer encoder blocks. Each block contains multi-head self-attention and a feedforward network (FFN) with residual connections. In a nutshell: self-attention allows each patch to "look at" all other patches and gather global context, while the FFN (a small MLP) mixes and re-projects features for each token. Because of the residual connections and layer norms, deep stacks of these layers refine the patch embeddings into very rich representations. In practice, ViTs often use 12, 24, or more such encoder layers (much like BERT in NLP).
+
+Finally, the model classifies the image by looking at the [CLS] token. After the last transformer layer, the hidden state of [CLS] – which has by then attended to all patches – is fed into a small MLP head (usually one or two fully-connected layers) with a softmax to predict the class.
+
+## Self-Attention in Vision Transformers
+
+The core mechanism in a ViT is self-attention, borrowed from NLP but applied over image patches. At each encoder layer, every patch embedding is linearly projected to query (Q), key (K), and value (V) vectors. The attention weight between two patches is then computed by taking the dot product of their query and key, scaling by the square root of the dimension, and applying softmax. The updated embedding for each patch is the weighted sum of all patch values. Mathematically:
+
+$$
+\text{Attention}(Q, K, V) = \text{softmax}\left( \frac{QK^T}{\sqrt{d_k}} \right) V
+$$
+
+Concretely, if patch i “asks” (via its query) how related it is to patch j (via patch j’s key), softmax will assign higher weights to more similar patches. The result is that patch i gathers information from all patches, with stronger contributions from patches that look similar.
+
+This attention mechanism is multi-headed: each layer has several attention heads running in parallel. Each head has its own Q, K, V projections, so different heads can focus on different patterns or relations. Given that each head can focus on different image relationships, an obvious question is: what exactly do these heads look for?
+
+## What Do Attention Heads Learn?
+
+Recent research reveals that ViT attention heads often behave like feature detectors, somewhat akin to early CNN kernels. For instance, mechanistic studies find that individual heads tend to specialize on simple visual patterns. One head might consistently find straight edges, another curved contours, and another broad texture regions. In effect, each head becomes monosemantic – it “spikes” for a particular kind of patch pattern.
+
+A 2023 visual-analytics study of ViTs found a taxonomy of patterns (e.g. local vs. global focus) that important heads tend to follow. Only a subset of heads carry most of the predictive signal. The “important” heads often exhibit coherent attentions (for example, consistently attending to a central object or its key parts), whereas the less important heads can wander aimlessly.
+
+![Attention Maps](/static/images/blog5/study.png)
+The figure above demonstrates how pruning specific visual tokens (like the face or jersey) affects a Vision Transformer’s predictions, revealing the causal importance of different image regions. In panel A, the original image yields “sunglass” as the top prediction. Panel C shows that removing (pruning) the face region dramatically shifts the model’s focus, causing “jersey” to become the new top class—indicating that the face was critical for detecting sunglasses.
+
+Conversely, in panel D, pruning the jersey region causes the model to revert its top prediction back to “sunglass,” while “jersey” nearly disappears from the output. The attention-head probability plot in panel B suggests that specific heads (like 9 and 10) are more sensitive to these regions, highlighting how Vision Transformers rely on distinct patches for different concepts. This causal approach goes beyond static attention maps and directly probes what parts of an image the model truly depends on.
+
+## Tools for Interpretability
+
+Several tools and methods have emerged to visualize ViT attention and attributions. Among the earliest were _**attention rollout**_ and _**attention flow**_ techniques, which propagate attention weights through the model’s layers to estimate which input patches most influenced the final output. These approaches are intuitive and efficient but tend to oversimplify the network’s behavior, treating attention as a purely linear signal pipeline.
+
+More recent efforts borrow from CNN interpretability, adapting gradient-based methods such as _**Grad-CAM**_, **_Integrated Gradients_**, and _**Layer-wise Relevance Propagation (LRP)**_ for use in ViTs. These tools produce more class-specific and precise saliency maps by tracing gradients back from the output through the attention layers. They offer sharper insights than raw attention scores alone.
+![Attention Maps](/static/images/blog5/attentionmap.png)
+
+Hybrid methods that combine attention with gradient information have emerged as particularly effective. In practice, the most robust explanations come from combining these methods. Libraries like `PyTorch Captum` and HuggingFace's `transformers-interpret` offer implementations of several techniques, enabling practitioners to build more reliable and nuanced interpretations of ViT models.
+
+## ViTs vs CNNs: A Philosophical Shift in Visual Perception
+
+In broad terms, Vision Transformers represent a different inductive bias than CNNs, which has philosophical implications for how “vision” is modeled:
+
+| **Aspect**           | **CNNs**                                                                 | **Vision Transformers (ViTs)**                                                        |
+| -------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| **Processing Style** | Local processing via small convolutional kernels.                        | Global self-attention allows every patch to interact with every other from layer one. |
+| **Inductive Biases** | Strong biases: locality, translation invariance.                         | Fewer priors; learns relationships from data.                                         |
+| **Data Efficiency**  | Performs well even on modest datasets due to built-in biases.            | Requires large-scale pretraining (e.g. ImageNet-21k, JFT) or distillation (DeiT).     |
+| **Visual Cues**      | Tends to rely on textures for classification.                            | More shape-biased, closer to human perception.                                        |
+| **Error Patterns**   | Less aligned with human errors.                                          | Error patterns statistically closer to humans.                                        |
+| **Robustness**       | Strong priors can help, but may fail under occlusion or rare variations. | Better at handling occlusions or distant features; occasionally brittle to noise.     |
+| **Computation**      | Scales linearly with input size (efficient).                             | Self-attention scales quadratically; newer variants aim to reduce this cost.          |
+
+> As Vision Transformers and Convolutional Neural Networks continue to coexist in the deep learning ecosystem, the natural question arises: which one should you use, and when?
+
+## Should you use a CNN or a Transformer?
+
+Like most things in machine learning, the answer is “it depends”—on your data, your compute budget, and your goals. While ViTs have shown impressive capabilities, they are not a universal replacement for CNNs. Each comes with strengths and trade-offs worth unpacking.
+
+- **CNNs** remain the go-to choice for scenarios where data is limited, real-time inference is needed, or compute resources are constrained. If you’re working on _embedded systems, medical imaging with few labeled examples, or real-time applications like robotics_, CNNs will likely be more efficient, interpretable, and practical.
+
+- **ViTs**, on the other hand, tend to shine when you have access to large-scale datasets or can leverage pretrained backbones. Their global attention allows them to capture complex dependencies and contextual cues that CNNs might miss. They’re also more computationally intensive—attention scales quadratically with image size—so training from scratch can be prohibitively expensive.
+
+## Conclusion
+
+Vision Transformers have brought a fundamental shift in how we model visual perception—moving from the localized, hierarchical feature extraction of CNNs to a global, context-rich attention mechanism. However, their data and compute requirements make them less suitable for lightweight or data-scarce scenarios—areas where CNNs still shine thanks to their built-in priors and efficiency. As we’ve seen, each model family carries different assumptions about how vision should work: CNNs rely on local composition, while ViTs let the model learn global structure from scratch.
+
+> That said, the lines are already blurring. A new generation of hybrid architectures—like CoAtNet, ConvNeXt, and Token2Token ViT—seeks to blend the structured inductive biases of CNNs with the expressive flexibility of attention.
+
+These insights suggest that our focus should not be on "choosing" one model that works better, but rather design systems that can adapt their inductive biases to the problem. As the field continues to evolve, so will our understanding of how machines “see.”
