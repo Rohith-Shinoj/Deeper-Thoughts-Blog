@@ -4,6 +4,7 @@
   "nlp": 2,
   "transformers": 1,
   "generative-ai": 5,
+  "interpretability": 2,
   "gan": 1,
   "cnns": 1,
   "computer-vision": 2,
@@ -12,6 +13,5 @@
   "scaling-laws": 1,
   "optimization": 1,
   "ai-efficiency": 1,
-  "vit": 1,
-  "interpretability": 1
+  "vit": 1
 }

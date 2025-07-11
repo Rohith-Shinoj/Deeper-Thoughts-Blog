@@ -6,6 +6,7 @@ tags: ['Generative-AI', 'ViT', 'Computer Vision', 'Attention', 'Interpretability
 draft: false
 summary: 'Vision Transformers (ViTs) have transformed the way machines process and understand images, replacing convolutions with self-attention. At the heart of this shift lies the question: how do these models “see”? This article explores the internal workings of ViTs, focusing on attention heads, patch embeddings, and interpretability techniques that help us decode how these models perceive the visual world.'
 images: ['/static/images/blog2/ViT-Attention.png']
+thumbnail: /static/images/blog5/thumbnail.png
 ---
 
 ## Introduction
@@ -49,7 +50,7 @@ The figure above demonstrates how pruning specific visual tokens (like the face 
 
 Conversely, in panel D, pruning the jersey region causes the model to revert its top prediction back to “sunglass,” while “jersey” nearly disappears from the output. The attention-head probability plot in panel B suggests that specific heads (like 9 and 10) are more sensitive to these regions, highlighting how Vision Transformers rely on distinct patches for different concepts. This causal approach goes beyond static attention maps and directly probes what parts of an image the model truly depends on.
 
-## Tools for Interpretability
+## Visualizing the Invisible
 
 Several tools and methods have emerged to visualize ViT attention and attributions. Among the earliest were _**attention rollout**_ and _**attention flow**_ techniques, which propagate attention weights through the model’s layers to estimate which input patches most influenced the final output. These approaches are intuitive and efficient but tend to oversimplify the network’s behavior, treating attention as a purely linear signal pipeline.
 

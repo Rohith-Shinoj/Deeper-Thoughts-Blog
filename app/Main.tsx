@@ -3,6 +3,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import Image from '@/components/Image'
 
 const MAX_DISPLAY = 5
 
@@ -36,7 +37,7 @@ export default function Home({ posts }) {
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
             {!posts.length && 'No posts found.'}
             {posts.slice(0, MAX_DISPLAY).map((post) => {
-              const { slug, date, title, summary, tags } = post
+              const { slug, date, title, summary, tags, thumbnail } = post
               return (
                 <li key={slug} className="py-12">
                   <article>
@@ -46,6 +47,19 @@ export default function Home({ posts }) {
                         <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
                           <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
                         </dd>
+                        {/* Thumbnail image under the date, from frontmatter */}
+                        {thumbnail && (
+                          <div className="mt-4 mb-2">
+                            <Image
+                              src={thumbnail}
+                              alt={title}
+                              width={320}
+                              height={180}
+                              className="h-50 w-50 rounded-lg border border-gray-700 object-cover"
+                              priority={false}
+                            />
+                          </div>
+                        )}
                       </dl>
                       <div className="space-y-5 xl:col-span-3">
                         <div className="space-y-6">
