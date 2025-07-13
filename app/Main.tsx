@@ -11,7 +11,7 @@ export default function Home({ posts }) {
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <section className="space-y-2 pt-6 pb-8 md:space-y-5">
+        <section className="space-y-2 pt-1 pb-4 md:space-y-5">
           <div className="space-y-4">
             <h1 className="text-lg leading-7 font-bold tracking-tight text-gray-900 sm:text-xl sm:leading-10 md:text-2xl md:leading-14 dark:text-gray-100">
               Welcome to DeeperThoughts – A blog that bridges the gap between code and cognition.
@@ -28,6 +28,21 @@ export default function Home({ posts }) {
               invitation to think deeper, explore further, and stay curious about the evolving
               landscapes of AI.
             </p>
+            <div className="mt-0 flex flex-col items-center justify-center gap-4 md:flex-row">
+              <a
+                className="inline-block rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white transition duration-300 hover:bg-blue-700 hover:shadow-[0_0_15px_5px_rgba(59,130,246,0.5)]"
+                href="https://www.rohithshinoj.com"
+                target="_blank"
+              >
+                Visit Portfolio
+              </a>
+              <a
+                href="#newsletter"
+                className="inline-block rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white transition duration-300 hover:bg-blue-700 hover:shadow-[0_0_15px_5px_rgba(59,130,246,0.5)]"
+              >
+                Subscribe to Newsletter
+              </a>
+            </div>
           </div>
         </section>
         <section aria-labelledby="latest-posts-heading">
@@ -112,8 +127,8 @@ export default function Home({ posts }) {
         </div>
       )}
       {siteMetadata.newsletter?.provider && (
-        <section aria-labelledby="newsletter-heading">
-          <h2 id="newsletter-heading" className="sr-only">
+        <section aria-labelledby="newsletter">
+          <h2 id="newsletter" className="sr-only">
             Newsletter Subscription
           </h2>
           <div className="flex items-center justify-center pt-4">
