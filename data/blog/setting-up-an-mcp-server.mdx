@@ -1,0 +1,185 @@
+---
+title: 'How to Set Up an MCP Server for Multi-Agent AI Systems'
+date: '2025-07-20'
+lastmod: '2025-07-20'
+tags: ['AI Agent', 'MCP', 'Automation', 'Developer Tools', 'Generative-AI']
+draft: false
+summary: 'Learn how to set up a lightweight MCP (Model Context Protocol) server to enable context sharing across AI agents like ChatGPT. This article walks through the core concepts and includes practical code examples to help you build context-aware, multi-agent AI systems.'
+thumbnail: /static/images/blog7/thumbnail.png
+---
+
+Modern AI agents are getting smarter — **but they’re still terrible collaborators**. Each model operates in its own bubble and have:
+
+- No memory of past steps
+- No awareness of other agents
+- No shared understanding of the user’s goal
+
+This leads to what we call **context fragmentation** — a major bottleneck in building multi-agent AI systems, assistants, or tools that actually work together.
+
+That’s where **MCP (Model Context Protocol)** comes in. MCP is a lightweight standard that lets AI agents share a common context, synchronize goals, and reason together. This article explores what MCP is, how it fits into the AI landscape, and how you can set up a simple MCP server to power context-aware AI agents like ChatGPT.
+
+<TOCInline toc={props.toc} />
+
+---
+
+## MCP: The Tech behind Context-Aware AI
+
+MCP stands for **Model Context Protocol** — a communication standard that allows **AI agents, tools, or models** to share and synchronize contextual information in real time.
+
+At its core, MCP is not about "controlling" agents — it's about helping them **coordinate**.
+
+You can think of it like a **shared bulletin board** or **workspace**:
+
+- Agents can **write** things they’ve learned (“user wants a summary of today’s news”)
+- Other agents can **read** and respond accordingly (“I'll fetch articles from news sources”)
+- Context evolves over time, but is **centrally visible** to all participants
+
+This allows multiple agents — or even different components of a single system — to remain aligned and avoid redundant work or misinterpretations.
+![Before vs After using MCP](/static/images/blog7/before-vs-after-mcp.png)
+
+---
+
+## MCP Clients vs Servers
+
+MCP arctitectures follow a client-server protocol with clear distinction of roles:
+
+**MCP Server**:
+
+- Stores key-value pairs representing session memory, tasks, agent states, etc.
+- Handles **incoming context updates** and **serves current context** on request.
+- Typically lightweight and stateless — think of it like a Redis or in-memory document store.
+
+**MCP Clients**:
+
+- These are your **AI agents**, tools, or wrappers (like ChatGPT).
+- Clients **send context updates** (e.g., “current task = booking a flight”) and **subscribe** to changes.
+
+This architecture is intentionally simple and general-purpose — allowing you to plug in agents running different models, on different stacks, written in different languages.
+
+---
+
+## When Should You Use MCP?
+
+You don’t need MCP for a simple chatbot that answers one-off questions. The role of MCP only becomes prominent if you're building **multi-step agents, autonomous systems, or anything involving tool use**.
+
+**Use MCP if you need:**
+
+- A way for agents to share **user goals, task history, or intermediate state**
+- Real-time collaboration between multiple AI models (e.g., one for retrieval, one for summarization)
+- A shared “working memory” across a session, device, or organization
+- Better **observability** into what agents are doing and why
+
+**Example Scenarios:**
+
+- A ChatGPT agent that delegates parts of a task to specialized tools (calendar lookup, email summarization)
+- An AI-powered assistant with memory that persists across sessions
+- Agents that coordinate tasks in a workflow engine (e.g., LangGraph or Autogen)
+
+---
+
+## How to Set Up an MCP Server (Conceptually)
+
+Let’s walk through what it _means_ to set up an MCP server — without diving into code.
+
+### 1. Choose Your Context Storage
+
+Your MCP server needs a place to store context. This could be:
+
+- An in-memory store (e.g., Python dictionary if prototyping)
+- A Redis or key-value database (for reliability and scale)
+- A document store like MongoDB (if you want structured memory per session)
+
+Example structure for key-value pairs (most common):
+
+```json
+{
+  "user_intent": "book a flight",
+  "last_tool_used": "calendar-checker",
+  "session_notes": "user prefers morning flights"
+}
+```
+
+### 2. Expose the required API
+
+Your MCP server acts like a context registry. Agents interact with it via simple HTTP endpoints, such as:
+
+- POST /context — to set or update context values
+- GET /context/&#123;agent_key&#125 — to retrieve a specific context item
+
+For example, an agent might send:
+
+```http
+POST /context
+Content-Type: application/json
+
+{
+  "key": "user_goal",
+  "value": "summarize latest news articles"
+}
+```
+
+### 3. Connect Your Agents (Like ChatGPT)
+
+Once your server is live, you configure your agents (like a ChatGPT plugin or wrapper) to:
+
+- Push updates when their internal state changes
+- Read context before taking any action
+
+---
+
+## Example workflow setup
+
+Once your MCP server is running and storing shared context, multiple AI agents can collaborate smoothly by reading from and writing to this shared memory. Imagine a travel-planning scenario with three agents:
+| Agent Name | Role | Interaction with MCP Server |
+|---------------------|--------------------------------------|----------------------------------------------------------------------------------------------|
+| ChatGPT | Orchestrates conversation and user interaction | Reads user goals and task progress from MCP before replying |
+| Flight Search Bot | Searches flights based on criteria | Reads user preferences from MCP; writes available flight options back to MCP. |
+
+> User says: "Help me book a business trip to San Francisco."
+
+1. ChatGPT Assistant writes to MCP:
+
+```json
+{
+  "user_intent": "plan business trip to San Francisco",
+  "current_task": "search flights"
+}
+```
+
+2. Flight Search Bot reads user_intent and current_task from MCP, performs flight queries, then writes:
+
+```json
+{
+  "flight_options": ["Flight A", "Flight B", "Flight C"],
+  "current_task": "select flight"
+}
+```
+
+3. ChatGPT Assistant reads updated flight_options from MCP, presents them to the user, and waits for selection.
+
+4. Once the user selects a flight, ChatGPT Assistant updates MCP:
+
+```json
+{
+  "selected_flight": "Flight B",
+  "current_task": "book calendar"
+}
+```
+
+This cycle continues, with all agents sharing and synchronizing context via the MCP server — enabling a smooth, multi-step, multi-agent workflow without direct coupling.
+
+---
+
+## Next Steps
+
+If you're excited by the idea of multi-agent systems and smarter AI workflows:
+
+- Check out frameworks like [LangGraph](https://github.com/langchain-ai/langgraph) or [Autogen](https://microsoft.github.io/autogen/)
+- Try building your own MCP-compatible tool
+- Read up on OpenAI's [ChatGPT tools API](https://platform.openai.com/docs/guides/function-calling)
+
+And if you're building your own agent infrastructure, adding an MCP server might be the best way to give your agents **shared context — and shared purpose**.
+
+---
+
+_Enjoyed this post? Subscribe to the newsletter for more deep dives into LLM infrastructure, orchestration, and applied AI engineering._

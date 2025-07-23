@@ -13,28 +13,35 @@ export default function Home({ posts }) {
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <section className="space-y-2 pt-1 pb-4 md:space-y-5">
           <div className="space-y-4">
-            <h1 className="text-lg leading-7 font-bold tracking-tight text-gray-900 sm:text-xl sm:leading-10 md:text-2xl md:leading-14 dark:text-gray-100">
+            <h1 className="text-lg leading-7 font-bold tracking-tight text-gray-800 sm:text-xl sm:leading-10 md:text-2xl md:leading-14 dark:text-gray-100">
               Welcome to DeeperThoughts – A blog that bridges the gap between code and cognition.
             </h1>
-            <p className="text-base text-gray-700 dark:text-gray-300">
+            <p className="text-gray-1000 text-base dark:text-gray-300">
               I'm Rohith Shinoj Kumar, a Research Engineer at the Centre for Development of
               Telematics (C-DOT), and a deep learning enthusiast with a passion for peeling back the
-              layers of multimodal machine learning systems. In a world of high-level abstractions,
-              I'm driven by a desire to understand the why behind models — connecting theory to
-              implementation.
+              layers of multimodal machine learning systems. This blog is intended to make recent
+              advances easier to grasp, and is an open invitation to think deeper, explore further,
+              and stay curious about the evolving landscapes of AI.
             </p>
-            <p className="text-base text-gray-700 dark:text-gray-300">
-              This blog is intended to make recent advances easier to grasp, and is an open
-              invitation to think deeper, explore further, and stay curious about the evolving
-              landscapes of AI.
+            <p className="text-gray-1000 text-base dark:text-gray-300">
+              Enjoyed what you read? I'd love to hear your thoughts—feel free drop a comment on any
+              article. For updates on new posts,{' '}
+              <a
+                href="#newsletter"
+                className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 underline"
+              >
+                Subscribe
+              </a>{' '}
+              to the newsletter and get the latest straight to your inbox 📬.
             </p>
-            <div className="mt-0 flex flex-col items-center justify-center gap-4 md:flex-row">
+            <p> </p>
+            {/* <div className="mt-0 flex flex-col items-center justify-center gap-4 md:flex-row">
               <a
                 className="inline-block rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white transition duration-300 hover:bg-blue-700 hover:shadow-[0_0_15px_5px_rgba(59,130,246,0.5)]"
-                href="https://www.rohithshinoj.com"
+                href="https://www.deeper-thoughts-blog.rohithshinoj.com/blog"
                 target="_blank"
               >
-                Visit Portfolio
+                View all Posts
               </a>
               <a
                 href="#newsletter"
@@ -42,7 +49,7 @@ export default function Home({ posts }) {
               >
                 Subscribe to Newsletter
               </a>
-            </div>
+            </div> */}
           </div>
         </section>
         <section aria-labelledby="latest-posts-heading">
@@ -59,7 +66,7 @@ export default function Home({ posts }) {
                     <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                       <dl>
                         <dt className="sr-only">Published on</dt>
-                        <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                        <dd className="text-base leading-6 font-medium text-gray-700 dark:text-gray-400">
                           <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
                         </dd>
                         {/* Thumbnail image under the date, from frontmatter */}
@@ -82,7 +89,7 @@ export default function Home({ posts }) {
                             <h3 className="text-2xl leading-8 font-bold tracking-tight">
                               <Link
                                 href={`/blog/${slug}`}
-                                className="text-gray-900 dark:text-gray-100"
+                                className="text-gray-800 dark:text-gray-100"
                               >
                                 {title}
                               </Link>
@@ -93,7 +100,7 @@ export default function Home({ posts }) {
                               ))}
                             </div>
                           </div>
-                          <div className="prose max-w-none text-gray-500 dark:text-gray-400">
+                          <div className="prose max-w-none text-gray-900 dark:text-gray-400">
                             {summary}
                           </div>
                         </div>

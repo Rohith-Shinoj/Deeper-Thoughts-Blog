@@ -51,7 +51,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <dl className="space-y-10">
                 <div>
                   <dt className="sr-only">Published on</dt>
-                  <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                  <dd className="text-base leading-6 font-medium text-gray-600 dark:text-gray-400">
                     <time dateTime={date}>
                       {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
                     </time>
@@ -59,7 +59,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 </div>
               </dl>
               <div>
-                <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14 dark:text-gray-100">
+                <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-800 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14 dark:text-gray-100">
                   {title}
                 </h1>
               </div>
@@ -84,7 +84,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                         )}
                         <dl className="text-sm leading-5 font-medium whitespace-nowrap">
                           <dt className="sr-only">Name</dt>
-                          <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
+                          <dd className="text-gray-800 dark:text-gray-100">{author.name}</dd>
                           <dt className="sr-only">Twitter</dt>
                           <dd>
                             {author.twitter && (
@@ -154,7 +154,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   >
                     {prev && prev.path && (
                       <div>
-                        <h3 className="text-sm tracking-wide text-gray-500 uppercase dark:text-gray-400">
+                        <h3 className="text-sm tracking-wide text-gray-600 uppercase dark:text-gray-400">
                           Previous Article
                         </h3>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
@@ -164,7 +164,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                     )}
                     {next && next.path && (
                       <div>
-                        <h3 className="text-sm tracking-wide text-gray-500 uppercase dark:text-gray-400">
+                        <h3 className="text-sm tracking-wide text-gray-600 uppercase dark:text-gray-400">
                           Next Article
                         </h3>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">

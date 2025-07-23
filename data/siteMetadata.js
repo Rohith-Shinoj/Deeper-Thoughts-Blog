@@ -6,7 +6,7 @@ const siteMetadata = {
   description:
     'Explore the latest advances in AI systems, deep learning architectures, and machine learning research. In-depth analysis of transformers, attention mechanisms, and neural network interpretability.',
   language: 'en-us',
-  theme: 'system', // system, dark or light
+  theme: 'dark', // system, dark or light
   siteUrl: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
   siteRepo: 'https://www.github.com/Rohith-Shinoj/blog1',
   siteLogo: `public/static/favicons/favicon.ico`,

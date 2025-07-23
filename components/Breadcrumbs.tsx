@@ -35,7 +35,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
                 {item.name}
               </Link>
             ) : (
-              <span className="font-semibold text-gray-900 dark:text-gray-100">{item.name}</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-100">{item.name}</span>
             )}
           </li>
         ))}

@@ -83,7 +83,7 @@ export default function ListLayoutWithTags({
     <>
       <div>
         <header className="pt-6 pb-6">
-          <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:hidden sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
+          <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-800 sm:hidden sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
             {title}
           </h1>
         </header>
@@ -136,7 +136,7 @@ export default function ListLayoutWithTags({
                       <article className="flex flex-col space-y-2 xl:space-y-0">
                         <dl>
                           <dt className="sr-only">Published on</dt>
-                          <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                          <dd className="text-base leading-6 font-medium text-gray-600 dark:text-gray-400">
                             <time dateTime={date} suppressHydrationWarning>
                               {formatDate(date, siteMetadata.locale)}
                             </time>
@@ -145,7 +145,7 @@ export default function ListLayoutWithTags({
                         <div className="space-y-3">
                           <div>
                             <h3 className="text-xl leading-8 font-bold tracking-tight">
-                              <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
+                              <Link href={`/${path}`} className="text-gray-800 dark:text-gray-100">
                                 {title}
                               </Link>
                             </h3>
@@ -153,9 +153,9 @@ export default function ListLayoutWithTags({
                               {tags?.map((tag) => <Tag key={tag} text={tag} />)}
                             </div>
                           </div>
-                          <div className="prose max-w-none text-gray-500 dark:text-gray-400">
+                          {/* <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                             {summary}
-                          </div>
+                          </div> */}
                         </div>
                       </article>
                     </li>
