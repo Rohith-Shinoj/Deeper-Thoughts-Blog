@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "Setting up build deployment..."
 
@@ -6,46 +7,28 @@ npx prettier --write .
 
 npm run build
 
+echo "✅ Build successful"
+echo 
+
 while true; do
-  read -p "Deploy via (g)it or (v)ercel? [v]: " deploy_method
+  read -p $'\e[31mDeploy via (g)it or (v)ercel? (default vercel):\e[0m ' deploy_method #red
+  
   deploy_method=${deploy_method:-v}  # Default to vercel deploy
 
   #major update
   if [[ "$deploy_method" == "g" ]]; then
     echo "→ Deploying via Git..."
+    echo
 
     git add .
 
-    read -p "Enter commit message: " msg
+    read -p $'\e[31mEnter commit message:\e[0m ' msg
+
     git commit -m "$msg"
     git push -u origin main
 
     echo "✅ Pushed to GitHub!"
-    echo "⏳ Waiting for Vercel deployment..."
-
-    VERCEL_TOKEN="6Xm357xDV14tLgPbqICTPYtE"
-    PROJECT="deeper-thoughts-blog"
-
-    # Poll the latest deployment
-    DEPLOYMENT_URL=""
-    for i in {1..10}; do
-    DEPLOYMENT_JSON=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN" "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=1")
-    DEPLOYMENT_URL=$(echo "$DEPLOYMENT_JSON" | grep -o '"url":"[^"]*' | cut -d'"' -f4)
-
-    if [ -n "$DEPLOYMENT_URL" ]; then
-        echo "✅ Deployment started at https://$DEPLOYMENT_URL"
-        break
-    else
-        sleep 3
-    fi
-    done
-
-    if [ -n "$DEPLOYMENT_URL" ]; then
-    echo "🔍 Opening logs in browser..."
-    open "https://$DEPLOYMENT_URL" 
-    else
-    echo "❌ Failed to retrieve deployment info."
-    fi
+    echo "⏳ Waiting for Vercel deployment. Check logs at https://vercel.com/rohith-shinojs-projects/deeper-thoughts-blog/deployments"
     break
 
   #minor update  
