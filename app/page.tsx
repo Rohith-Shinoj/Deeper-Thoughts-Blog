@@ -17,6 +17,8 @@ export default async function Page() {
           content="Exploring AI systems and deep learning architectures — one idea at a time."
         />
         <meta property="og:title" content="Deeper Thoughts – AI & Deep Learning Blog" />
+        <meta property="og:site_name" content="Deeper Thoughts" />
+
         <meta
           property="og:description"
           content="Exploring AI systems and deep learning architectures — one idea at a time."

@@ -5,7 +5,7 @@ lastmod: '2025-06-16'
 tags: ['GAN', 'CNNs', 'Computer Vision', 'Generative AI']
 draft: false
 summary: 'Ever came across reels on Instagram that show Queen Elizabeth breakdancing and wondered how they look so uncannily real? In a world where AI can create art, faces, and even deepfakes from scratch, GANs stand at the center. But how does AI really generate images that even humans can’t tell are fake?'
-thumbnail: /static/images/blog2/thumbnail.png
+thumbnail: /static/images/gan/thumbnail.png
 ---
 
 Generative Adversarial Networks (GANs) have emerged as a powerful framework for modeling complex, high-dimensional data distributions without relying on explicit density estimation. Their ability to generate photorealistic images, translate styles across domains, synthesize data for augmentation, and contribute to scientific discovery such as molecular design, positions GANs at the forefront of generative modeling research. These models excel in capturing intricate data structures, producing samples that often rival real-world data in fidelity and diversity.
@@ -26,7 +26,7 @@ At a high level, generative models are algorithms that learn to create new data 
 
 - **Diffusion models** such as _Stable DIffusion_ start with pure noise and learn to denoise it step-by-step until an image emerges. They generate stunning results but are computationally expensive and slow to sample from.
 
-![Diffusion Models vs. GANs vs. VAEs: Comparison of Deep Generative Models](/static/images/blog2/comparison.png)
+![Diffusion Models vs. GANs vs. VAEs: Comparison of Deep Generative Models](/static/images/gan/comparison.png)
 
 **GANs**, on the other hand, take a completely different approach. They don’t bother modeling the exact probability of your data. Instead, they train two networks simultaneously: The generator improves by learning how to produce images that are increasingly difficult to distinguish from real ones. The discriminator improves by getting better at catching the fakes.
 
@@ -50,7 +50,7 @@ The networks are trained _simultaneously_, with opposing objectives. In practice
 
 <div align="center">
   <img
-    src="/static/images/blog2/gan-value-function.png"
+    src="/static/images/gan/gan-value-function.png"
     alt="Visualization of the effect of latent space on GAN images"
   />
 </div>
@@ -67,7 +67,7 @@ The networks are trained _simultaneously_, with opposing objectives. In practice
 
 In simpler terms, The generator creates a batch of fake images from random noise. The discriminator then evaluates these along with real images, outputting real/fake labels. Both networks are updated via backpropagation: the discriminator learns from the true labels, and the generator receives gradients aimed at increasing the discriminator’s error. This loop repeats, so over time the generator’s outputs steadily improve and the discriminator must adapt to distinguish the more realistic fakes.
 
-![Image generation using GANs](/static/images/blog2/GAN.gif)
+![Image generation using GANs](/static/images/gan/GAN.gif)
 
 ## Evaluating GANs : How do we improve them over epochs
 
@@ -87,7 +87,7 @@ This phenomenon implies that the latent space has learned a smooth, meaningful m
 
 <div align="center">
   <img
-    src="/static/images/blog2/latents-space-interpolation-2.png"
+    src="/static/images/gan/latents-space-interpolation-2.png"
     alt="Visualization of the effect of latent space interpolationon GAN images"
   />
 </div>
@@ -96,7 +96,7 @@ Even more intriguingly, in many GAN variants (particularly those trained with re
 
 <div align="center">
   <img
-    src="/static/images/blog2/latent-space-faces.gif"
+    src="/static/images/gan/latent-space-faces.gif"
     alt="Visualization of the effect of disentanglment on GAN images"
   />
 </div>
@@ -114,7 +114,7 @@ So, what exactly goes wrong when GANs fail? And why does it happen so often? Let
 - **Mode collapse**: The generator ignores parts of the data distribution and produces only a few outputs (sometimes even the same output repeatedly). For example, a GAN on digit images might only generate “6”s and “9”s. This happens when Generator **_G_** finds a small set of samples that consistently fool the Discriminator **_D_**, and has no incentive to explore other modes. The result is low diversity (low recall). Empirically, GANs often exhibit partial collapse where several distinct samples map to nearly identical outputs. This issue was already noted in the original GAN literature
 
 <div align="center">
-  <img src="/static/images/blog2/mode-collapse.png" alt="Visualization of mode collapse in GAN" />
+  <img src="/static/images/gan/mode-collapse.png" alt="Visualization of mode collapse in GAN" />
 </div>
 
 - **Vanishing or exploding gradients**: If the discriminator becomes too confident (e.g. perfectly separating real and fake), the generator’s gradient (∇G) can vanish to zero. Then **_G_** stops learning. Conversely, unstable training can cause gradient explosions, saturating activations (e.g. outputs saturating at 0/1).

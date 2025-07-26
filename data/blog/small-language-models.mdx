@@ -5,7 +5,7 @@ lastmod: '2025-06-23'
 tags: ['LLMs', 'scaling-laws', 'Optimization', 'Generative-AI', 'ai-efficiency']
 draft: false
 summary: 'Exploring how 1B-parameter small language models can outperform 405B giants through clever compute allocation, test-time scaling, and innovative training strategies. Is bigger really always better in the AI world?'
-thumbnail: /static/images/blog3/thumbnail.png
+thumbnail: /static/images/slm/thumbnail.png
 ---
 
 ## Introduction
@@ -19,7 +19,7 @@ In the era of multi-hundred-billion-parameter LLMs, it's natural to assume "bigg
 Scaling laws provide a fundamental roadmap for understanding how language models improve as we scale them. The famous principle—"double the model size → double the training tokens → better performance"—captures a key insight: larger models trained on more data tend to perform significantly better.
 
 This empirical relationship, first rigorously quantified by researchers at OpenAI and later expanded by others, shows that model performance follows smooth, predictable curves as we increase parameters, dataset size, and compute.
-![Scaling Laws Diagram](/static/images/blog3/scaling-laws-transformer.png)
+![Scaling Laws Diagram](/static/images/slm/scaling-laws-transformer.png)
 
 It is intuitive then to believe that larger models perform better. A game-changing Chinchilla study by Hoffmann et al. (2022) recalibrated this understanding: they trained a 70B model on 4× more data and watched it outperform much larger models (GPT-3 at 175B, Gopher at 280B).
 
@@ -37,7 +37,7 @@ Small Language Models (SLMs) typically contain millions to a few billion paramet
 
 SLMs require dramatically less memory and computational power, making them ideal for resource-constrained environments like smartphones, edge devices, and offline applications. SLMs also need fewer GPUs for deployment, deliver faster inference latency, and consume less energy and can run on-device to maintain privacy
 
-![Small LLM Architecture](/static/images/blog3/slm-architecture-comparison.png)
+![Small LLM Architecture](/static/images/slm/slm-architecture-comparison.png)
 However, SLMs aren't without limitations. With fewer parameters comes naturally reduced capacity, often resulting in shorter context windows and diminished emergent abilities out-of-the-box. Techniques like chain-of-thought prompting that work seamlessly on 100B+ models often don't directly translate to smaller architectures without specialized training approaches.
 
 ## Compute-Optimal Training: The Chinchilla Study
@@ -55,7 +55,7 @@ Small Language Models (SLMs) often use one or more of these strategies to optimi
 3. Architectural Optimizations
    Efficiency tehcniques like FlashAttention, grouped-query attention (Like in DeepSeek), and low-rank factorizations allow small models to process more context or make multiple passes within the same compute limits.
 
-![Compute-Optimal Training Curve](/static/images/blog3/compute-optimal-training.png)
+![Compute-Optimal Training Curve](/static/images/slm/compute-optimal-training.png)
 
 A key insight drawn from the graph is that intelligently using compute at test time—by iteratively revising answers—can significantly boost performance, especially on medium and hard questions. Rather than spending all available compute on pretraining larger models, allocating some toward smarter inference strategies yields better results under the same budget.
 
@@ -93,7 +93,7 @@ The theoretical advantages of SLMs are being validated by impressive real-world 
 - Google's Gemini Nano (1.8B parameters) nearly matches its 405B "Gemini Pro" sibling across diverse benchmarks including mathematics, reasoning, and code generation
 - Meta's CodeLLaMA 7B rivals or exceeds much larger models on programming tasks. Specialized domains like code compilation and data decompilation have seen 1-7B parameter models approach the capabilities of hundred-billion parameter giants through targeted training on high-quality synthetic code examples.
 
-![Small LLM Use Cases](/static/images/blog3/slms-vs-llms.png)
+![Small LLM Use Cases](/static/images/slm/slms-vs-llms.png)
 
 These success stories demonstrate that wherever compute is constrained, latency is critical, or specialized expertise is required, SLMs are not just viable alternatives—they're often superior solutions.
 
@@ -103,7 +103,7 @@ The SLM revolution is accelerating, with several emerging trends promising to ma
 
 Next-generation teacher-student relationships will feature collaborative learning where LLMs and SLMs learn together. **Mixture-of-Experts Architectures** use small SLMs as intelligent routers that activate specialized sub-models for specific tasks. Meta's 8×7B Mixtral exemplifies this approach, combining eight 7B "experts" to deliver 56B-model capacity at 7B-model inference costs.
 
-![Future AI Architecture](/static/images/blog3/moe.png)
+![Future AI Architecture](/static/images/slm/moe.png)
 
 Innovations in attention mechanisms—including **Sliding-Window Attention** and **Sparse-Attention** may also enable SLMs to process much longer inputs efficiently.
 

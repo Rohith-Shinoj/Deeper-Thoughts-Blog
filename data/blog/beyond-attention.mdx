@@ -5,7 +5,7 @@ lastmod: '2025-06-10'
 tags: ['LLMs', 'Attention', 'NLP', 'Transformers', 'Generative AI', 'Interpretability']
 draft: false
 summary: 'New capabilities of Large Language Models like GPT, LLaMA, Claude, and Grok are emerging almost every day, and at the heart of these powerful models lies the multi-head self-attention mechanism—the secret behind their impressive reasoning and language skills. This article takes a closer look at how these attention heads work together under the hood to create the tools we rely on and admire today.'
-thumbnail: /static/images/blog1/thumbnail.png
+thumbnail: /static/images/attention/thumbnail.png
 ---
 
 Attention is All You Need—a paper that revolutionized everything we know today about large language models. It introduced the Transformer architecture and replaced recurrence with a powerful mechanism called self-attention, setting the stage for breakthroughs in NLP, from translation and summarization to code generation and reasoning. At the heart of these models lie hundreds, sometimes thousands, of attention heads—tiny components that decide what to focus on in each input.
@@ -22,7 +22,7 @@ _(If you are already familiar with Transformer architectures, feel free to skip 
 
 Language models are far from new. In fact, the use of language models dates back decades, with early systems relying heavily on recurrent neural networks (RNNs) to process sequential data like text. RNNs were designed to handle sequences by maintaining a hidden state that carried information from previous words, making them natural candidates for language tasks.
 
-![RNN Language Models](/static/images/blog1/RNN.png)
+![RNN Language Models](/static/images/attention/RNN.png)
 
 So why did these tools fall short when it came to real-world usability? RNNs struggled with long-range dependencies, meaning they had difficulty remembering information from far back in a sentence or paragraph. This limitation made it challenging for them to capture the full context needed for complex language understanding. Moreover, RNNs processed data sequentially, which slowed down training and inference, making them inefficient for scaling up to the massive datasets and models we see today.
 
@@ -58,7 +58,7 @@ Attention Heads are the foundational blocks of Transofrmer models in the same wa
 
 It takes a bunch of tokens and converts them into vector embeddings. Each head then computes attention scores—usually through the well-known Query, Key, and Value mechanism. Based on these scores, it blends information from other tokens into a context-aware representation of each word. Now, depending on how the attention mechanism is configured, Transformer models can be built using encoder-only, decoder-only, or encoder–decoder architectures.
 
-![Attention models](/static/images/blog1/Attention.png)
+![Attention models](/static/images/attention/Attention.png)
 
 **Encoder-only** models like _BERT_ and _RoBERTa_ use bidirectional self-attention, meaning each word can attend to all others in the input—great for tasks like classification or question answering. **Decoder-only** models like _GPT, Claude, and LLaMA_ use causal (unidirectional) self-attention, where each word only attends to the ones before it, making them ideal for text generation. Finally, **encoder–decoder models** like _T5, BART, and MarianMT_ combine both: the encoder reads the entire input using bidirectional attention, and the decoder generates output using causal self-attention while also attending to the encoder's output via cross-attention—a powerful setup for tasks like translation or summarization.
 
@@ -84,7 +84,7 @@ Simply put, each of these units focus on one very elementary task that makes lit
 
 Some attention heads act like internal parsers. They focus solely on syntactic structures—linking subjects to verbs and maintaining grammatical agreement. For example, in GPT-like models, specific heads have been found that track subject–verb number agreement. When the sentence says "The dogs…", one head ensures the verb is plural ("bark"), not singular ("barks").
 
-![Interpretation of grammar in LLMs](/static/images/blog1/grammar.png)
+![Interpretation of grammar in LLMs](/static/images/attention/grammar.png)
 
 The figure above, derived from the paper _'A Multiscale Visualization of Attention in the Transformer Model'_ by Vig et. al tracks lexical patterns in Pythia/GPT heads in GPT-2. Each panel plots one head's attention (colored lines) for an input sentence. The left head (layer 8) copies each list item to itself ("apples, oranges, bananas"); the center head (layer 3) couples verbs ("ran", "barked"); the right head (layer 10) connects letters of the acronym "ASA".
 
@@ -107,7 +107,7 @@ Interestingly, there are even inhibition heads that block attention to incorrect
 ### 4. Indirect Object Identification (IoI) tasks
 
 Recent studies have identified a circuit of 26 heads (out of 144) implementing the simple algorithm: "find all names, remove duplicates, output the leftover name". These heads branch into other functional classes, where each head performs a sub-task: detecting duplication, suppressing confusion, and finally copying the correct name to the output.
-![Indirect Object Identification in LLMs](/static/images/blog1/IoI.png)
+![Indirect Object Identification in LLMs](/static/images/attention/IoI.png)
 For example, in the sentence "Alice recieved the notes sent by Bob and Alice completed the assignment", these heads flag repeated tokens (Alice) and steer the model toward the relevant instance.
 
 ### 5. Redundant Circuits

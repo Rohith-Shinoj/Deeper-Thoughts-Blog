@@ -8,7 +8,7 @@ const siteMetadata = {
   language: 'en-us',
   theme: 'dark', // system, dark or light
   siteUrl: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
-  siteRepo: 'https://www.github.com/Rohith-Shinoj/blog1',
+  siteRepo: 'https://www.github.com/Rohith-Shinoj/attention',
   siteLogo: `public/static/favicons/favicon.ico`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/social-preview.png`,
   // mastodon: 'https://mastodon.social/@mastodonuser',

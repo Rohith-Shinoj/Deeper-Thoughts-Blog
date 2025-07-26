@@ -5,7 +5,7 @@ lastmod: '2025-07-06'
 tags: ['Generative-AI', 'ViT', 'Computer Vision', 'Attention', 'Interpretability']
 draft: false
 summary: 'Vision Transformers (ViTs) have transformed the way machines process and understand images, replacing convolutions with self-attention. At the heart of this shift lies the question: how do these models “see”? This article explores the internal workings of ViTs, focusing on attention heads, patch embeddings, and interpretability techniques that help us decode how these models perceive the visual world.'
-thumbnail: /static/images/blog5/thumbnail.png
+thumbnail: /static/images/vit/thumbnail.png
 ---
 
 In recent years, computer vision has seen a paradigm shift. Instead of using only convolutions, many state-of-the-art models now treat images like sequences of “words” by applying Transformers to patches. Vision Transformers (ViTs) split an image (e.g. 224×224) into a grid of fixed-size patches (commonly 16×16 pixels), flatten them, and linearly embed each patch into a token vector. This is akin to reading an image as a sentence of patch-tokens.
@@ -18,7 +18,7 @@ Crucially, ViTs rely much less on built-in image biases: unlike CNNs with hardwi
 
 Vision Transformers start by tokenizing the image. For example, a 224×224 image can be divided into 14×14 = 196 non-overlapping patches of size 16×16. Each patch is flattened into a vector and projected by a learnable linear layer into an embedding space. Crucially, a special [CLS] token is prepended to this sequence of patch embeddings – this learnable token will aggregate information from all patches and serve as the image-level feature. Positional embeddings are added so the model knows each patch’s location so that the transformer can infer order.
 
-![Vision Transformer Architecture](/static/images/blog5/VIT.png)
+![Vision Transformer Architecture](/static/images/vit/VIT.png)
 
 Once embedded, the patch tokens (and [CLS] token) are fed through a stack of standard transformer encoder blocks. Each block contains multi-head self-attention and a feedforward network (FFN) with residual connections. In a nutshell: self-attention allows each patch to "look at" all other patches and gather global context, while the FFN (a small MLP) mixes and re-projects features for each token. Because of the residual connections and layer norms, deep stacks of these layers refine the patch embeddings into very rich representations. In practice, ViTs often use 12, 24, or more such encoder layers (much like BERT in NLP).
 
@@ -42,7 +42,7 @@ Recent research reveals that ViT attention heads often behave like feature detec
 
 A 2023 visual-analytics study of ViTs found a taxonomy of patterns (e.g. local vs. global focus) that important heads tend to follow. Only a subset of heads carry most of the predictive signal. The “important” heads often exhibit coherent attentions (for example, consistently attending to a central object or its key parts), whereas the less important heads can wander aimlessly.
 
-![Attention Maps](/static/images/blog5/study.png)
+![Attention Maps](/static/images/vit/study.png)
 The figure above demonstrates how pruning specific visual tokens (like the face or jersey) affects a Vision Transformer’s predictions, revealing the causal importance of different image regions. In panel A, the original image yields “sunglass” as the top prediction. Panel C shows that removing (pruning) the face region dramatically shifts the model’s focus, causing “jersey” to become the new top class—indicating that the face was critical for detecting sunglasses.
 
 Conversely, in panel D, pruning the jersey region causes the model to revert its top prediction back to “sunglass,” while “jersey” nearly disappears from the output. The attention-head probability plot in panel B suggests that specific heads (like 9 and 10) are more sensitive to these regions, highlighting how Vision Transformers rely on distinct patches for different concepts. This causal approach goes beyond static attention maps and directly probes what parts of an image the model truly depends on.
@@ -52,7 +52,7 @@ Conversely, in panel D, pruning the jersey region causes the model to revert its
 Several tools and methods have emerged to visualize ViT attention and attributions. Among the earliest were _**attention rollout**_ and _**attention flow**_ techniques, which propagate attention weights through the model’s layers to estimate which input patches most influenced the final output. These approaches are intuitive and efficient but tend to oversimplify the network’s behavior, treating attention as a purely linear signal pipeline.
 
 More recent efforts borrow from CNN interpretability, adapting gradient-based methods such as _**Grad-CAM**_, **_Integrated Gradients_**, and _**Layer-wise Relevance Propagation (LRP)**_ for use in ViTs. These tools produce more class-specific and precise saliency maps by tracing gradients back from the output through the attention layers. They offer sharper insights than raw attention scores alone.
-![Attention Maps](/static/images/blog5/attentionmap.png)
+![Attention Maps](/static/images/vit/attentionmap.png)
 
 Hybrid methods that combine attention with gradient information have emerged as particularly effective. In practice, the most robust explanations come from combining these methods. Libraries like `PyTorch Captum` and HuggingFace's `transformers-interpret` offer implementations of several techniques, enabling practitioners to build more reliable and nuanced interpretations of ViT models.
 
