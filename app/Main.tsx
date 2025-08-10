@@ -23,9 +23,18 @@ export default function Home({ posts }: { posts: Post[] }) {
   const [selectedTag, setSelectedTag] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [showSearch, setShowSearch] = useState(false)
+  const [showAddArticle, setShowAddArticle] = useState(false)
+  const [newArticle, setNewArticle] = useState({
+    title: '',
+    summary: '',
+    tags: '',
+    date: new Date().toISOString().split('T')[0],
+  })
 
+  // Get all unique tags from posts
   const allTags = [...new Set(posts.flatMap((post) => post.tags || []))] as string[]
 
+  // Filter posts based on selected tag and search query
   const filteredPosts = posts.filter((post) => {
     const matchesTag = !selectedTag || (post.tags && post.tags.includes(selectedTag))
     const matchesSearch =
@@ -36,6 +45,19 @@ export default function Home({ posts }: { posts: Post[] }) {
 
     return matchesTag && matchesSearch
   })
+
+  const handleAddArticle = () => {
+    // Here you would typically send the data to your backend
+    console.log('New article:', newArticle)
+    // Reset form and close modal
+    setNewArticle({
+      title: '',
+      summary: '',
+      tags: '',
+      date: new Date().toISOString().split('T')[0],
+    })
+    setShowAddArticle(false)
+  }
 
   return (
     <>
@@ -63,76 +85,177 @@ export default function Home({ posts }: { posts: Post[] }) {
               </a>{' '}
               to the newsletter and get the latest straight to your inbox 📬.
             </p>
-            <p></p>
+            <p> </p>
           </div>
         </section>
 
-        <section aria-labelledby="latest-posts-heading">
-          <div className="pt-6 pb-4">
-            <div className="space-y-4">
-              {/* Filter Icon Button */}
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setShowSearch(!showSearch)}
-                  className="hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-2 px-3 py-2 text-gray-700 transition-colors dark:text-gray-300"
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                    />
-                  </svg>
-                  <span className="text-sm font-medium">Filter</span>
-                </button>
-
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Showing {filteredPosts.length} of {posts.length} posts
-                </p>
-              </div>
-
-              {/* Search Input - Only shown when filter is clicked */}
-              {showSearch && (
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    placeholder="Search posts by title, content, or tags..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="focus:ring-primary-500 w-full max-w-md rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
+        {/* Filter and Search Section */}
+        <section className="pt-4 pb-6">
+          <div className="space-y-4">
+            {/* Filter and Add Article Buttons */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowAddArticle(true)}
+                className="bg-primary-500 hover:bg-primary-600 flex items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
                   />
-                </div>
-              )}
+                </svg>
+                <span className="text-sm font-medium">Add Article</span>
+              </button>
 
-              {/* Active Filters Display */}
-              {(selectedTag || searchQuery) && (
-                <div className="mb-4 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <span>Active filters:</span>
-                  {selectedTag && (
-                    <span className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 rounded-full px-2 py-1">
-                      Topic: {selectedTag}
-                    </span>
-                  )}
-                  {searchQuery && (
-                    <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                      Search: "{searchQuery}"
-                    </span>
-                  )}
+              <button
+                onClick={() => setShowSearch(!showSearch)}
+                className="hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-2 px-3 py-2 text-gray-700 transition-colors dark:text-gray-300"
+              >
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  />
+                </svg>
+                <span className="text-sm font-medium">Filter</span>
+              </button>
+
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Showing {filteredPosts.length} of {posts.length} posts
+              </p>
+            </div>
+
+            {/* Search Input - Only shown when filter is clicked */}
+            {showSearch && (
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Search posts by title, content, or tags..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="focus:ring-primary-500 w-full max-w-md rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
+                />
+              </div>
+            )}
+
+            {/* Tag Filter Buttons
+            {showSearch && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                <button
+                  onClick={() => setSelectedTag('')}
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                    selectedTag === ''
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  All Topics
+                </button>
+                {allTags.map((tag: string) => (
                   <button
-                    onClick={() => {
-                      setSelectedTag('')
-                      setSearchQuery('')
-                    }}
-                    className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 underline"
+                    key={tag}
+                    onClick={() => setSelectedTag(selectedTag === tag ? '' : tag)}
+                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                      selectedTag === tag
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                    }`}
                   >
-                    Clear all
+                    {tag}
                   </button>
+                ))}
+              </div>
+            )} */}
+
+            {/* Active Filters Display */}
+            {(selectedTag || searchQuery) && (
+              <div className="mb-4 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <span>Active filters:</span>
+                {selectedTag && (
+                  <span className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 rounded-full px-2 py-1">
+                    Topic: {selectedTag}
+                  </span>
+                )}
+                {searchQuery && (
+                  <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    Search: "{searchQuery}"
+                  </span>
+                )}
+                <button
+                  onClick={() => {
+                    setSelectedTag('')
+                    setSearchQuery('')
+                  }}
+                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 underline"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Add Article Modal Overlay */}
+        {showAddArticle && (
+          <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
+            <div className="mx-4 w-full max-w-lg rounded-lg bg-white p-6 dark:bg-gray-800">
+              <div className="text-center">
+                <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                  Have an idea you'd like to share?
+                </h3>
+                <div className="mb-6 space-y-3 text-left text-gray-700 dark:text-gray-300">
+                  <p>
+                    Hey there! If you'd like to contribute an article, here's how to get started:
+                  </p>
+                  <ol className="ml-4 list-inside list-decimal space-y-2">
+                    <li>
+                      Head over to the{' '}
+                      <a
+                        href="https://github.com/Rohith-Shinoj/blog1"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary-500 hover:text-primary-600 underline"
+                      >
+                        GitHub repo
+                      </a>
+                    </li>
+                    <li>
+                      Add your content into the template at{' '}
+                      <code className="rounded bg-gray-100 px-1 dark:bg-gray-700">
+                        /data/template.mdx
+                      </code>
+                    </li>
+                    <li>
+                      Update the frontmatter at the top with your details:
+                      <ul className="mt-1 ml-6 list-inside list-disc space-y-1 text-sm">
+                        <li>Your article title, author, date, and summary</li>
+                        <li>Add relevant tags</li>
+                        <li>Include any cool images you want to use</li>
+                      </ul>
+                    </li>
+                    <li>Write your article in Markdown (feel free to get creative!)</li>
+                    <li>
+                      Commit and push your work with a pull request at{' '}
+                      <code className="rounded bg-gray-100 px-1 dark:bg-gray-700">/data/blog</code>!
+                    </li>
+                  </ol>
                 </div>
-              )}
+                <button
+                  onClick={() => setShowAddArticle(false)}
+                  className="bg-primary-500 hover:bg-primary-600 rounded-md px-6 py-2 text-white transition-colors"
+                >
+                  Sounds great! 👍
+                </button>
+              </div>
             </div>
           </div>
+        )}
 
+        <section aria-labelledby="latest-posts-heading">
           <h2 id="latest-posts-heading" className="sr-only">
             Latest Blog Posts
           </h2>
