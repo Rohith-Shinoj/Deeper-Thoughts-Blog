@@ -1,10 +1,10 @@
 {
-  "llms": 4,
+  "llms": 5,
   "attention": 2,
   "nlp": 2,
   "transformers": 1,
-  "generative-ai": 6,
-  "interpretability": 2,
+  "generative-ai": 7,
+  "interpretability": 3,
   "vit": 2,
   "semi-supervised-learning": 1,
   "computer-vision": 3,
@@ -13,11 +13,11 @@
   "onnx": 1,
   "gan": 1,
   "cnns": 1,
-  "optimization": 2,
+  "optimization": 3,
+  "ai-efficiency": 2,
   "ai-security": 1,
   "developer-tools": 3,
   "ai-agent": 1,
   "mcp": 1,
-  "scaling-laws": 1,
-  "ai-efficiency": 1
+  "scaling-laws": 1
 }

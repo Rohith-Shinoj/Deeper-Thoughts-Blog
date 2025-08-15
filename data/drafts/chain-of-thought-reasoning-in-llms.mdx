@@ -1,0 +1,36 @@
+---
+title: 'Chain of Thought Reasoning in Large Language Models'
+date: '2025-08-01'
+lastmod: '2025-08-01'
+tags: ['Generative-AI', 'LLMs', 'Optimization', 'NLP', 'Interpretability']
+draft: false
+summary: 'Chain-of-Thought (CoT) reasoning is transforming how large language models tackle complex, multi-step problems. Instead of jumping straight to an answer, CoT prompts models to think out loud and reason into logical steps that improve accuracy. This blog unpacks the origins of CoT, the methods behind it and why its becoming essential for better LLMs problem-solving.'
+thumbnail: /static/images/cot/thumbnail.png
+---
+
+Language models like GPT-4 or Gemini can answer questions astonishingly well, but often they “jump” to the answer without showing their work. What if we could get these models to explain their reasoning step by step? This is the idea behind Chain-of-Thought (CoT) prompting. CoT attempts to make the model reveal its hidden steps as part of its output.
+
+> This approach addresses the central question: can LLMs be guided to reason in a transparent, step-wise fashion?
+
+<TOCInline toc={props.toc} exclude="Introduction" />
+
+## Making AI Think Out Loud
+
+At its core, Chain-of-Thought reasoning is a prompting technique (and, increasingly, a training paradigm) where a model is encouraged to produce intermediate reasoning steps before arriving at a final answer.
+Instead of:
+
+Q: What's 17 x 23?
+
+A: 391
+
+…the model might respond:
+
+17 x 20 = 340
+
+17 x 3 = 51
+
+340 + 51 = 391
+
+Answer: 391
+
+This intermediate reasoning can be shown to the user (for transparency) or kept hidden (for performance or safety).

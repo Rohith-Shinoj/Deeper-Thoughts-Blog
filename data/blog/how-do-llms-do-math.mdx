@@ -1,0 +1,85 @@
+---
+title: 'How do LLMs do Math?'
+date: '2025-08-03'
+lastmod: '2025-08-03'
+tags: ['LLMs', 'Generative-AI', 'Interpretability', 'Optimization', 'AI-efficiency']
+draft: false
+summary: 'Large Language Models like GPT-4 and Gemini werent built as calculators, but can now solve many math problems. They work by recognizing and reproducing patterns, not by “understanding” math in a human sense, so errors and hallucinations still occur. This blog explores how LLMs handle math and the challenges they face.'
+thumbnail: /static/images/math/thumbnail.png
+---
+
+Large language models (LLMs) like GPT and Gemini were originally designed as token predictors – giant neural networks that convert words into tokens and guess the next token to generate coherent text. We wouldn’t normally expect such models to excel at math or computation. After all, they have no built-in calculator or explicit rules for arithmetic. Yet, newer models (such as Gemini Pro, GPT-5, etc) can solve many math problems even better than humans.
+
+> How is this possible? How do LLMs do math? And critically, how can we trust their answers?
+
+<TOCInline toc={props.toc} exclude="Introduction" />
+
+## LLMs as language models, not calculators
+
+At heart, LLMs are transformers: models that take text, tokenize it, and process it through layers of multi-head attention. Each token is converted to a vector, then repeatedly updated based on other tokens in context. In the end, the model outputs the most likely next token. This design excels at language tasks – summarizing articles, writing essays, translating languages, etc.
+
+> _To dive deeper into how LLMs work for text cases, check out the article [Beyond Attention](https://www.deeper-thoughts-blog.rohithshinoj.com/blog/beyond-attention)._
+
+However this architecture has no concept of numbers or arithmetic rules. It “knows” math only as math problems that appear in its training text. As a result, early LLMs (GPT-2, GPT-3) often stumbled on math: they could sometimes do simple arithmetic seen during training, but they would fail on most other complex calculations or reasoning.
+
+## Why LLMs suck at math?
+
+Let’s face it — LLMs suck at math. Particularly the earlier models. They were like that one friend who always claims to be a math whiz but can’t even handle basic multiplication without a calculator. Sure, they could breeze answer 2 + 2, but these models weren’t calculators; they were over-caffeinated fortune cookies, spitting out numbers that **_sounded right_** but had the precision of a drunk dart throw. They weren’t actually calculating — just guessing based on patterns — and somehow made even basic arithmetic look like advanced quantum physics.
+
+![Probabilities of tokens from an LLM](/static/images/math/probability.png)
+
+Most general LLMs have **no built-in arithmetic logic**. The model isn’t wired like a calculator; it doesn’t understand that numbers obey algebraic laws unless it learned this from text. It’s a black-box that just echoes statistical regularities. Further, models use **floating vectors**, not exact integers, so adding long numbers or precise decimals can cause rounding errors or overflow beyond their context length.
+
+Earlier LLMs tended to “hallucinate” arithmetic and give wrong results (e.g. confidently stating <code>123×4567 = 568,401</code> when it’s actually 560,241).
+
+Because of this, for most of the early LLM era we did not expect strong math ability.
+For example, GPT-3 scored just ~2–5% on the GSM8K grade-school math benchmark and below 20% on the MATH high-school dataset, often failing even basic multi-step arithmetic or word problems.
+
+## Evolving Capabilities: How LLMs got better
+
+LLM research has rapidly changed this picture. Surprisingly, modern LLMs have begun to handle many math tasks quite well. Why? Partly because models got bigger and trained on more data (including code and technical text). Also, new techniques help them reason through math.
+
+Primarily, **Chain-of-Thought (CoT)** reasoning has been a game-changer. Instead of just spitting out an answer, models are now trained to think step-by-step, breaking down complex problems into manageable parts. This mimics how humans approach math: we don’t just jump to the answer; we work through it logically.
+
+![Chain of Thought reasoning](/static/images/math/reasoning.png)
+
+CoT makes the model emit the _latent solution path_ as tokens—e.g., define variables, write equations, isolate unknowns, and verify. This combats common math failure modes (lost carry, dropped minus sign, premature rounding, skipped case splits). \*However, CoT still won’t fix missing knowledge or symbolic slips in very long derivations.
+
+Further, _Fine-tuning an LLM_ on math problem data (word problems, proofs, code solutions) teaches it mathematical language. OpenAI trained specialized “math” models internally for better reasoning. ChatGPT 4o and upwards also makes use of _External tools_ that allow the model to run code, use a calculator, or query a knowledge base.
+
+## Benchmarks and performance
+
+As LLMs evolved over time, researches have also come up with new benchmarks to measure their math capabilities. GPT-3’s reports less than 10% on GSM8K showing early models struggled with multi-step arithmetic, while GPT-4 surpasses 90% on the same dataset.
+
+| Model         | GSM8K (%) | MATH (%) | AQuA (%) | Notes                                                                   |
+| ------------- | --------- | -------- | -------- | ----------------------------------------------------------------------- |
+| GPT-3 (175B)  | 7.9       | 15.0     | 18.3     | Early model, poor multi-step reasoning                                  |
+| Codex (12B)   | 45.2      | 33.5     | 41.0     | Code-pretraining helps arithmetic & procedural tasks                    |
+| GPT-3.5-turbo | 78.0      | 55.0     | 61.2     | CoT + few-shot prompting                                                |
+| GPT-4         | 92.0      | 79.0     | 81.0     | Few-shot + CoT; strong multi-step reasoning                             |
+| Claude 3      | 85.5      | 70.2     | 74.0     | Competitive on structured problems                                      |
+| Gemini 1.5    | 81.0      | 67.5     | 71.0     | Excels at well-formatted text problems                                  |
+| GPT-5         | 97.1      | 80.0     | 82.0     | Deep Understanding Prompting, self-consistency, perfect AIME 2025 score |
+
+![Performance across benchmarks](/static/images/math/benchmarks.png)
+
+Most gains beyond 50% on GSM8K and MATH are directly attributed to CoT prompting and self-consistency sampling.
+LLMs have gone from virtually failing arithmetic tasks to near-human accuracy on routine grade-school and high-school math problems within a few model generations. Nonetheless, LLMs may sometimes reason incorrectly internally but still guess the right final number, or vice versa.
+
+## Limitations and reliability
+
+Despite progress, there are clear limits. LLMs can and do make mistakes, often for subtle reasons:
+
+1. **Hallucinations**: Microsoft research points out that LLMs may _“hallucinate solutions or miss the underlying logic entirely”_ if data is uneven. For example, they might invent a plausible explanation or skip a tricky step. This is particularly problematic because they can sound confident while being wrong.
+
+2. **Data gaps**: If a kind of problem was rare in training data, the model will likely fumble. Some tasks (like tricky geometry proofs or abstract algebra) remain nearly impossible for current models.
+
+3. **Complexity ceiling**: As problems grow in length and steps, error rates compound. Even GPT-4’s excellent performance in simpler benchmarks falls when questions require dozens of logical steps
+
+## What the future holds
+
+The remarkable progress of LLMs in mathematics—from GPT-3 struggling on simple arithmetic to GPT-5 achieving near-perfect scores on GSM8K and even AIME-level problems—offers a glimpse of what may be possible in broader AI reasoning. Looking forward, this evolution hints at a larger trajectory toward **Artificial General Intelligence (AGI)**.
+
+> The leap from simple token prediction to near-human mathematical reasoning is more than a technical milestone—it’s a clear signal that LLMs are steadily progressing along the path toward truly general intelligence.
+
+As LLMs become more capable of reliably modeling formal logic, verifying their own solutions, and integrating external computation tools, they begin to exhibit behaviors traditionally associated with human-like intelligence: understanding complex concepts, generalizing across domains, and solving novel problems. The next generation of models will likely need deeper self-supervised reasoning, meta-cognition, and formalized knowledge integration to move closer to AGI.
