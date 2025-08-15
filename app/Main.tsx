@@ -68,11 +68,11 @@ export default function Home({ posts }: { posts: Post[] }) {
               Welcome to DeeperThoughts – A blog that bridges the gap between code and cognition.
             </h1>
             <p className="text-gray-1000 text-base dark:text-gray-300">
-              I'm Rohith Shinoj Kumar, a Research Engineer at the Centre for Development of
-              Telematics (C-DOT), and a deep learning enthusiast with a passion for peeling back the
-              layers of multimodal machine learning systems. This blog is intended to make recent
-              advances easier to grasp, and is an open invitation to think deeper, explore further,
-              and stay curious about the evolving landscapes of AI.
+              I'm Rohith, a Research Scientist at the Centre for Development of Telematics (C-DOT),
+              and a deep learning enthusiast with a passion for peeling back the layers of
+              multimodal machine learning systems. This blog is intended to make recent advances
+              easier to grasp, and is an open invitation to think deeper, explore further, and stay
+              curious about the evolving landscapes of AI.
             </p>
             <p className="text-gray-1000 text-base dark:text-gray-300">
               Enjoyed what you read? I'd love to hear your thoughts—feel free drop a comment on any
