@@ -15,6 +15,7 @@ interface Post {
   date: string
   title: string
   summary?: string
+  authors?: string[]
   tags: string[]
   thumbnail?: string
 }
@@ -31,10 +32,8 @@ export default function Home({ posts }: { posts: Post[] }) {
     date: new Date().toISOString().split('T')[0],
   })
 
-  // Get all unique tags from posts
   const allTags = [...new Set(posts.flatMap((post) => post.tags || []))] as string[]
 
-  // Filter posts based on selected tag and search query
   const filteredPosts = posts.filter((post) => {
     const matchesTag = !selectedTag || (post.tags && post.tags.includes(selectedTag))
     const matchesSearch =
@@ -47,9 +46,7 @@ export default function Home({ posts }: { posts: Post[] }) {
   })
 
   const handleAddArticle = () => {
-    // Here you would typically send the data to your backend
     console.log('New article:', newArticle)
-    // Reset form and close modal
     setNewArticle({
       title: '',
       summary: '',
@@ -171,7 +168,6 @@ export default function Home({ posts }: { posts: Post[] }) {
               </div>
             )} */}
 
-            {/* Active Filters Display */}
             {(selectedTag || searchQuery) && (
               <div className="mb-4 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                 <span>Active filters:</span>
@@ -199,7 +195,6 @@ export default function Home({ posts }: { posts: Post[] }) {
           </div>
         </section>
 
-        {/* Add Article Modal Overlay */}
         {showAddArticle && (
           <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
             <div className="mx-4 w-full max-w-lg rounded-lg bg-white p-6 dark:bg-gray-800">

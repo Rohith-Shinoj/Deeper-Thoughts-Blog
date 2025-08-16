@@ -3,7 +3,7 @@
   "attention": 2,
   "nlp": 2,
   "transformers": 1,
-  "generative-ai": 7,
+  "generative-ai": 8,
   "interpretability": 3,
   "vit": 2,
   "semi-supervised-learning": 1,
@@ -16,8 +16,11 @@
   "optimization": 3,
   "ai-efficiency": 2,
   "ai-security": 1,
-  "developer-tools": 3,
+  "developer-tools": 4,
   "ai-agent": 1,
   "mcp": 1,
-  "scaling-laws": 1
+  "scaling-laws": 1,
+  "video-generation": 1,
+  "veo3": 1,
+  "computer-vision-": 1
 }
