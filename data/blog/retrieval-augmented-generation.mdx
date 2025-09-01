@@ -1,0 +1,79 @@
+---
+title: 'Feeding Your Data to LLMs Using Retrieval Augmented Generation (RAG)'
+date: '2025-08-20'
+lastmod: '2025-08-20'
+tags: ['LLMs', 'RAG', 'Optimization', 'Generative-AI', 'ai-efficiency']
+draft: false
+summary: 'Large language models dont actually “know” everything—they just predict. Retrieval-Augmented Generation (RAG) changes the game by letting them pull in real knowledge, in real time. Curious how? This blog unpacks RAG, its mechanics, and why it might be the future of intelligent AI systems.'
+thumbnail: /static/images/rag/thumbnail.png
+---
+
+Retrieval-Augmented Generation (RAG) is a Machine Learning approach that combines information retrieval with generative language models. In a RAG system, a user's question first triggers a search of an external knowledge base or document collection to fetch relevant facts; those facts are then fed into a large language model (LLM) so it can generate a grounded, accurate answer. In other words, RAG “augments” a chat or text-generation model with an information retrieval step.
+
+This pattern gives the model “new” facts from proprietary or up-to-date data, so it can produce factually correct, domain-specific answers. In practice this means RAG works in three stages - data ingestion (indexing), retrieval, and generation resulting in a Q&A system that is both accurate and context-aware.
+
+<TOCInline toc={props.toc} />
+
+---
+
+## How RAG Works: Indexing, Retrieval, and Generation
+
+The core workflow of RAG can be broken down into 3 distinct steps:
+
+1. **Data Ingestion (Indexing)**: Documents are loaded and split into smaller chunks. An embedding model (e.g. OpenAI or HuggingFace encoder) converts each chunk into a high-dimensional vector. These vectors (with text metadata) are stored in a vector database (like FAISS, Chroma, or Pinecone) to allow fast similarity search.
+
+2. **Retrieval**: When a user asks a question, that query is also embedded into a vector. The system retrieves the top k chunks whose embeddings are most similar to the query vector (typically using cosine similarity). This fetches the most relevant information for the query.
+
+3. **Augmentation & Generation**: The retrieved text snippets are combined with the original query (often via a prompt template) and fed into the LLM. The LLM then generates a response that integrates both the question and the evidence from the retrieved documents. This ensures the answer is grounded in real data.
+
+![A RAG Pipeline](/static/images/rag/rag.png)
+
+---
+
+## The RAG Pipeline in Practice
+
+For example, a typical RAG system might answer a question by first finding paragraphs in a company wiki, then asking the LLM (like GPT-4o) “Using the following excerpts, answer the question at the end,” where the excerpts are the retrieved text. This yields responses that cite or reflect actual facts, rather than relying solely on the model's training.
+
+When a user asks a question, RAG's runtime process kicks in as shown above.
+
+- First, the query is turned into a vector and used to retrieve the top-k relevant documents from the vector store.
+- Those retrieved passages are then inserted into the prompt (often via a template like <code>“Use these facts to answer: `{context}`…”)</code> so the LLM can reason over them.
+- The model generates a human-like answer that is explicitly based on the retrieved facts.
+
+Because the LLM now “sees” the evidence in its context, it tends to be more accurate and specific. In fact, RAG can dramatically improve answer clarity: by grounding generation in real data, it reduces the risk of hallucination and ensures up-to-date or proprietary information can be leveraged
+
+---
+
+## To RAG or not to RAG?
+
+Because it combines the strengths of search and generation, RAG finds itself in many practical applications and is an active area of research. Most modern LLM-based systems (like ChatGPT Enterprise, Gemini Pro, etc) use some sort of RAG to provide accurate, context-aware answers such as for:
+
+- **Question-Answering Chatbots**: RAG is ideal for building chatbots that answer questions about a specific body of text (e.g. company policies, product manuals or a website). Instead of hallucinating, the bot finds relevant passages to ground its answers.
+
+![RAG Pipeline for an interactive chatbot](/static/images/rag/chatbot.png)
+
+- **Domain-Specific Assistants**: In specialized domains (legal, medical, technical support), RAG can give LLMs access to proprietary or up-to-date domain knowledge. By feeding in domain data, the model can answer niche queries it wouldn't know otherwise.
+
+- **Fact-Checking and Grounded Generation**: For any generative task where facts matter (like summarizing news or writing reports), RAG can retrieve verified data to cite. This leads to more reliable and relevant outputs.
+
+In short, RAG is a general pattern whenever you need an LLM to produce answers tied closely to a specific dataset. It has been popularized as the backbone of knowledge-augmented chatbots and AI assistants
+
+---
+
+## Building systems with RAG Frameworks
+
+While you could stitch together embeddings, vector stores, and retrievers from scratch, why suffer when purpose-built frameworks exist? The RAG ecosystem has matured quickly, and today several open-source and commercial toolkits streamline the process of connecting data with large language models.
+
+A few notable players include:
+
+- **LangChain** - the most widely used, offering modular chains, integrations, and developer-friendly abstractions.
+
+- **LlamaIndex** (formerly GPT Index) - strong at building and managing indices over structured/unstructured data.
+
+- **Haystack** - a research-oriented framework with solid support for hybrid search, pipelines, and evaluation.
+
+Each of these frameworks tackles the same core problem—bridging retrieval and generation—but they differ in emphasis. LangChain shines for composability and production integrations, LlamaIndex simplifies indexing, and Haystack appeals to researchers and tinkerers who want flexibility.
+
+> The real challenge now is: what knowledge should it retrieve—and who gets to decide?
+
+---
