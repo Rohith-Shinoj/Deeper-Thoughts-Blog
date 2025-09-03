@@ -7,6 +7,7 @@ import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 import Image from '@/components/Image'
 import { useState } from 'react'
+import SocialIcon from '@/components/social-icons'
 
 const MAX_DISPLAY = 10
 
@@ -62,7 +63,7 @@ export default function Home({ posts }: { posts: Post[] }) {
         <section className="space-y-2 pt-1 pb-4 md:space-y-5">
           <div className="space-y-4">
             <h1 className="text-lg leading-7 font-bold tracking-tight text-gray-800 sm:text-xl sm:leading-10 md:text-2xl md:leading-14 dark:text-gray-100">
-              Welcome to DeeperThoughts – A blog that bridges the gap between code and cognition.
+              Welcome to the DeeperThoughts blog!
             </h1>
             <p className="text-gray-1000 text-base dark:text-gray-300">
               I'm Rohith, a Research Scientist at the Centre for Development of Telematics (C-DOT),
@@ -90,40 +91,49 @@ export default function Home({ posts }: { posts: Post[] }) {
         <section className="pt-4 pb-6">
           <div className="space-y-4">
             {/* Filter and Add Article Buttons */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setShowAddArticle(true)}
-                className="bg-primary-500 hover:bg-primary-600 flex items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                <span className="text-sm font-medium">Add Article</span>
-              </button>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setShowAddArticle(true)}
+                  className="bg-primary-500 hover:bg-primary-600 flex items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  <span className="text-sm font-medium">Add Article</span>
+                </button>
 
-              <button
-                onClick={() => setShowSearch(!showSearch)}
-                className="hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-2 px-3 py-2 text-gray-700 transition-colors dark:text-gray-300"
-              >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                  />
-                </svg>
-                <span className="text-sm font-medium">Filter</span>
-              </button>
+                <button
+                  onClick={() => setShowSearch(!showSearch)}
+                  className="hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-2 px-3 py-2 text-gray-700 transition-colors dark:text-gray-300"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                    />
+                  </svg>
+                  <span className="text-sm font-medium">Filter</span>
+                </button>
 
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Showing {filteredPosts.length} of {posts.length} posts
-              </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Showing {filteredPosts.length} of {posts.length} posts
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <SocialIcon kind="github" href={siteMetadata.github} size={5} />
+                <SocialIcon kind="linkedin" href={siteMetadata.linkedin} size={5} />
+                <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={7} />
+                <SocialIcon kind="link" href={'https://rohithshinoj.com'} size={8} />
+              </div>
             </div>
 
             {/* Search Input - Only shown when filter is clicked */}

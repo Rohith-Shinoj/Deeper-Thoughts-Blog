@@ -1,0 +1,134 @@
+---
+title: 'Building and Deploying an RAG Pipeline using LangChain and Chroma'
+date: '2025-08-22'
+lastmod: '2025-08-22'
+tags: ['LLMs', 'RAG', 'MLOps', 'Langchain', 'Developer Tools', 'ai-efficiency']
+draft: false
+summary: 'Ever wondered how chatbots like customer support assistants instantly pull up the right product manual page or FAQ? From setup to deployment, lets explore how you can transform raw data into a powerful, domain-aware chatbot in just a few lines of code using Langchain and Chroma to build a Retrieval-Augmented Generation (RAG) pipeline.'
+thumbnail: /static/images/langchain/thumbnail.png
+---
+
+Retrieval-Augmented Generation (RAG) lets us build smarter question-answering systems by combining a large language model (LLM) with a way to fetch relevant documents. In this article, we’ll be using the LangChain framework to build a simple Q&A chatbot for a famous product – the iPhone 16 – using RAG.
+
+_To skip the explanations and move straight to code, jump over to [Loading Product Data and Creating Embeddings](http://www.deeper-thoughts-blog.rohithshinoj.com/blog/langchain#loading-product-data-and-creating-embeddings) or find the full code on [GitHub](https://www.github.com/Rohith-Shinoj/langchain-rag)._
+
+<TOCInline toc={props.toc} exclude="Introduction" />
+
+## Why RAG and LangChain?
+
+At a high level, a RAG system stores product information in a vector store and retrieves relevant snippets when the user asks a question. The LLM then uses those retrieved documents as context to generate an accurate answer. For example, if you ask “What are the camera specs of the iPhone 16?”, the system will fetch documents about the iPhone 16’s camera from the vector store, then let the LLM answer based on that.
+![RAG Pipeline](/static/images/langchain/rag.png)
+LangChain is a popular open-source framework for LLM apps, and we’ll use it together with ChromaDB, an AI-native vector database. This article walks through loading product data, indexing it in Chroma, and using an LLM to answer questions. By the end, we will have designed a functioning “product knowledge bot” that can answer questions about the iPhone 16 from up-to-date information.
+
+## ChromaDB: The Vector Store database
+
+At the heart of any Retrieval-Augmented Generation (RAG) pipeline lies the vector store—the place where your data lives once it’s been transformed into embeddings. Think of it as the library where every passage, paragraph, or sentence of your documents is filed away, not alphabetically, but by meaning.
+![Chroma DB pipeline](/static/images/langchain/Chroma-DB.png)
+ChromaDB has quickly become one of the most popular open-source vector databases, largely because it’s lightweight, developer-friendly, and integrates seamlessly with LangChain. Instead of asking, “What’s the next token?”, ChromaDB is answering, “Which document chunk is semantically closest to this query?”.
+
+## Loading Product Data and Creating Embeddings
+
+First, we need to gather some textual information about the iPhone 16. In a real application, you might scrape documentation, manuals, or API data.
+
+```bash
+pip install openai langchain langchain-chroma
+```
+
+For simplicity, we’ll load content from Wikipedia or other public pages. LangChain provides document loaders for this; for example, we could use the WikipediaLoader and a valid OpenAI API key to fetch iPhone 16 info:
+
+```python
+import os
+from langchain.chat_models import ChatOpenAI
+from langchain.vectorstores import Chroma
+from langchain import OpenAI, RetrievalQA
+from langchain.document_loaders import WikipediaLoader
+
+# Set your OpenAI API key
+os.environ["OPENAI_API_KEY"] = "<YOUR_OPENAI_KEY>"
+
+# Load iPhone 16 info from Wikipedia
+loader = WikipediaLoader(query="iPhone 16", lang="en", load_max_docs=2)
+docs = loader.load()
+print(f"Loaded {len(docs)} documents from Wikipedia")
+```
+
+The loader returns a list of Document objects containing the page content. Each document holds the text about the product. Next, we have to create embeddings for this text to store in our DB. We’ll use the default OpenAI embedding but any embedding model will work.
+
+```python
+from langchain.embeddings import OpenAIEmbeddings
+embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+```
+
+With embeddings ready, we can initialize a Chroma vector store and add our documents. Chroma will store the vectors in a local or in-memory database:
+
+```python
+# Initialize Chroma vector store (in-memory by default)
+vector_store = Chroma(collection_name="iphone16_collection", embedding_function=embeddings)
+vector_store.add_documents(documents=docs)
+```
+
+At this point, Chroma has computed embeddings for the iPhone 16 documents and stored them in a collection named iphone16_collection. We can query this store by similarity. The vector store serves as our knowledge base for retrieval.
+
+## Retrieval-Augmented Generation Pipeline with LangChain
+
+Now that our documents have been indexed, we can build a retrieval chain to answer questions. LangChain makes this easy: we create a retriever from the vector store, then instantiate a QA chain with an LLM. In this case, we use OpenAI’s chat model:
+
+```python
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
+retriever = vector_store.as_retriever(search_type="similarity", search_kwargs={"k": 3}) # Modify search_type depending on your needs
+
+# Build a Retrieval QA chain
+qa_chain = RetrievalQA.from_llm(llm=llm, retriever=retriever)
+```
+
+## Search types in LangChain
+
+LangChain supports several search types for retrieval, each with its own strengths such as:
+
+1. **`similarity`**: Finds documents whose embeddings are closest to the query vector (cosine similarity or Euclidean distance).
+
+   > Similarity is generally the best for general-purpose RAG pipelines because it directly measures semantic closeness.
+
+2. **`mmr` (Maximal Marginal Relevance)**: Balances relevance and diversity by selecting documents that are both similar to the query and different from each other.
+
+3. **`similarity_score_threshold`**: Returns only documents above a certain similarity threshold and ensures irrelevant chunks don’t creep in, but might filter too aggressively if thresholds are set poorly.
+
+4. **`hybrid`**: Merges traditional keyword matching with embedding similarity and is helpful when you need both precision of keywords and breadth of semantic similarity.
+
+## Testing the Product Q&A Bot
+
+In our setup, the The RetrievalQA chain will handle:
+
+- converting the user query to an LLM prompt
+- retrieving relevant docs, and
+- generating an answer.
+
+Now we can test our bot with some questions about the iPhone 16. For example:
+
+```python
+question = "What are the main camera specifications of the iPhone 16?"
+answer = qa_chain.run(question)
+print("Bot:", answer)
+```
+
+## Under the Hood: How it Works
+
+When we call `qa_chain.run(question)`, here’s what happens:
+
+1. **Vector Search with Chroma**
+
+ChromaDB computes the embedding of your question and compares it against stored document embeddings. The top-k chunks (say, 3) with the highest similarity scores are pulled out.
+
+2. **Prompt Construction**
+
+The retriever takes these chunks and inserts them into the LLM prompt. The LLM’s prompt might look something like: `Use the following iPhone 16 details to answer: [retrieved context]. Question: [user’s question]`.
+
+3. **LLM Reasoning**
+
+The LLM now reasons over both the question and the retrieved context. Instead of relying on memorized knowledge, it synthesizes an answer grounded in your documents.
+
+4. **Answer Generation**
+
+The final output is returned in natural language. If the relevant detail isn’t in the retrieved context, a well-configured chain may even say “I couldn’t find that in the provided data.”
+
+> This workflow prevents hallucinations by forcing the model to “show its work.” Instead of inventing facts, it’s constrained by the passages surfaced by Chroma.

@@ -110,3 +110,12 @@ export function Bluesky(svgProps: SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
+
+export function LinkIcon(svgProps: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...svgProps}>
+      <title>Link</title>
+      <path d="M3.9 12a5 5 0 0 1 5-5h3a1 1 0 1 1 0 2h-3a3 3 0 0 0 0 6h3a1 1 0 1 1 0 2h-3a5 5 0 0 1-5-5Zm7-1a1 1 0 0 1 1-1h2.2a1 1 0 1 1 0 2H11.9a1 1 0 0 1-1-1Zm2.2-4h3a5 5 0 1 1 0 10h-3a1 1 0 1 1 0-2h3a3 3 0 1 0 0-6h-3a1 1 0 1 1 0-2Z" />
+    </svg>
+  )
+}
