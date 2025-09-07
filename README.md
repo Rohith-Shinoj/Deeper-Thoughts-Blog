@@ -29,7 +29,7 @@ Follow these steps to get the blog running locally:
 1. **Clone the repository**
 
    ```bash
-   git clone [https://www.github.com/Rohith-Shinoj/blog1.git](https://www.github.com/rohith-shinoj/blog1.git)
+   git clone [https://www.github.com/Rohith-Shinoj/Deeper-Thoughts-Blog.git](https://www.github.com/rohith-shinoj/Deeper-Thoughts-Blog.git)
    cd attention
    ```
 
@@ -76,7 +76,7 @@ tags: ['machine learning', 'AI', 'personal']
 ```
 
 3. Write your content below the frontmatter using MDX syntax. You can embed React components, add code blocks, images, and more.
-4. Submit a merge request at [Link](https://www.github.com/Rohith-Shinoj/blog1/pulls)
+4. Submit a merge request at [Link](https://www.github.com/Rohith-Shinoj/Deeper-Thoughts-Blog/pulls)
 
 #### 🧠 Tips
 

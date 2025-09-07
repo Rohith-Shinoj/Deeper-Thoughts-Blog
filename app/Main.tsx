@@ -220,7 +220,7 @@ export default function Home({ posts }: { posts: Post[] }) {
                     <li>
                       Head over to the{' '}
                       <a
-                        href="https://github.com/Rohith-Shinoj/blog1"
+                        href="https://github.com/Rohith-Shinoj/Deeper-Thoughts-Blog"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary-500 hover:text-primary-600 underline"
