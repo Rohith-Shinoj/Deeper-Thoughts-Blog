@@ -20,8 +20,6 @@ const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-space-grotesk',
-  preload: true,
-  fallback: ['system-ui', 'arial'],
 })
 
 export const metadata: Metadata = {

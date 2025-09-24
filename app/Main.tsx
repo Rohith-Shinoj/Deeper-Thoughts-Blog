@@ -6,10 +6,11 @@ import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 import Image from '@/components/Image'
+import { useEffect, useRef } from 'react'
 import { useState } from 'react'
 import SocialIcon from '@/components/social-icons'
 
-const MAX_DISPLAY = 10
+const MAX_DISPLAY = 6
 
 interface Post {
   slug: string
@@ -21,11 +22,13 @@ interface Post {
   thumbnail?: string
 }
 
-export default function Home({ posts }: { posts: Post[] }) {
+export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIndex?: number }) {
   const [selectedTag, setSelectedTag] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [showSearch, setShowSearch] = useState(false)
   const [showAddArticle, setShowAddArticle] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(Math.min(3, posts.length))
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
   const [newArticle, setNewArticle] = useState({
     title: '',
     summary: '',
@@ -56,6 +59,24 @@ export default function Home({ posts }: { posts: Post[] }) {
     })
     setShowAddArticle(false)
   }
+
+  useEffect(() => {
+    if (!sentinelRef.current) return
+    const el = sentinelRef.current
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((c) => Math.min(c + 3, Math.min(MAX_DISPLAY, filteredPosts.length)))
+        }
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [filteredPosts.length])
+
+  const totalPages = Math.ceil(posts.length / MAX_DISPLAY)
+  const currentPage = Math.floor(startIndex / MAX_DISPLAY) + 1
 
   return (
     <>
@@ -132,7 +153,7 @@ export default function Home({ posts }: { posts: Post[] }) {
                 <SocialIcon kind="github" href={siteMetadata.github} size={5} />
                 <SocialIcon kind="linkedin" href={siteMetadata.linkedin} size={5} />
                 <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={7} />
-                <SocialIcon kind="link" href={'https://rohithshinoj.com'} size={8} />
+                <SocialIcon kind="link" href={'https://www.rohithshinoj.com'} size={8} />
               </div>
             </div>
 
@@ -267,79 +288,121 @@ export default function Home({ posts }: { posts: Post[] }) {
 
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
             {!posts.length && 'No posts found.'}
-            {filteredPosts.slice(0, MAX_DISPLAY).map((post) => {
-              const { slug, date, title, summary, tags, thumbnail } = post
-              return (
-                <li key={slug} className="py-12">
-                  <article>
-                    <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                      <dl>
-                        <dt className="sr-only">Published on</dt>
-                        <dd className="text-base leading-6 font-medium text-gray-700 dark:text-gray-400">
-                          <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                        </dd>
-                        {/* Thumbnail image under the date, from frontmatter */}
-                        {thumbnail && (
-                          <div className="mt-4 mb-2">
-                            <Image
-                              src={thumbnail}
-                              alt={title}
-                              width={320}
-                              height={180}
-                              className="h-50 w-50 rounded-lg border border-gray-700 object-cover"
-                              priority={false}
-                            />
-                          </div>
-                        )}
-                      </dl>
-                      <div className="space-y-5 xl:col-span-3">
-                        <div className="space-y-6">
-                          <div>
-                            <h3 className="text-2xl leading-8 font-bold tracking-tight">
-                              <Link
-                                href={`/blog/${slug}`}
-                                className="text-gray-800 dark:text-gray-100"
-                              >
-                                {title}
-                              </Link>
-                            </h3>
-                            <div className="flex flex-wrap">
-                              {tags.map((tag) => (
-                                <Tag key={tag} text={tag} />
-                              ))}
+            {filteredPosts
+              .slice(startIndex, startIndex + Math.min(visibleCount, MAX_DISPLAY))
+              .map((post) => {
+                const { slug, date, title, summary, tags, thumbnail } = post
+                return (
+                  <li key={slug} className="py-12">
+                    <article>
+                      <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
+                        <dl>
+                          <dt className="sr-only">Published on</dt>
+                          <dd className="text-base leading-6 font-medium text-gray-700 dark:text-gray-400">
+                            <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                          </dd>
+                          {/* Thumbnail image under the date, from frontmatter */}
+                          {thumbnail && (
+                            <div className="mt-4 mb-2">
+                              <Image
+                                src={thumbnail}
+                                alt={title}
+                                width={320}
+                                height={180}
+                                className="h-50 w-50 rounded-lg border border-gray-700 object-cover"
+                                priority={false}
+                              />
+                            </div>
+                          )}
+                        </dl>
+                        <div className="space-y-5 xl:col-span-3">
+                          <div className="space-y-6">
+                            <div>
+                              <h3 className="text-2xl leading-8 font-bold tracking-tight">
+                                <Link
+                                  href={`/blog/${slug}`}
+                                  className="text-gray-800 dark:text-gray-100"
+                                >
+                                  {title}
+                                </Link>
+                              </h3>
+                              <div className="flex flex-wrap">
+                                {tags.map((tag) => (
+                                  <Tag key={tag} text={tag} />
+                                ))}
+                              </div>
+                            </div>
+                            <div className="prose max-w-none text-gray-900 dark:text-gray-400">
+                              {summary}
                             </div>
                           </div>
-                          <div className="prose max-w-none text-gray-900 dark:text-gray-400">
-                            {summary}
+                          <div className="text-base leading-6 font-medium">
+                            <Link
+                              href={`/blog/${slug}`}
+                              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                              aria-label={`Read more: "${title}"`}
+                            >
+                              Read more &rarr;
+                            </Link>
                           </div>
                         </div>
-                        <div className="text-base leading-6 font-medium">
-                          <Link
-                            href={`/blog/${slug}`}
-                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                            aria-label={`Read more: "${title}"`}
-                          >
-                            Read more &rarr;
-                          </Link>
-                        </div>
                       </div>
-                    </div>
-                  </article>
-                </li>
-              )
-            })}
+                    </article>
+                  </li>
+                )
+              })}
           </ul>
+          <div ref={sentinelRef} />
         </section>
       </div>
       {posts.length > MAX_DISPLAY && (
-        <div className="flex justify-end text-base leading-6 font-medium">
-          <Link
-            href="/blog"
-            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-            aria-label="All posts"
-          >
-            All Posts &rarr;
-          </Link>
+        <div className="text-base leading-6 font-medium">
+          <div className="grid grid-cols-3 items-center py-6">
+            <div />
+            <div className="flex items-center gap-2 justify-self-center">
+              {currentPage > 1 && (
+                <Link
+                  href={currentPage - 1 === 1 ? `/` : `/page/${currentPage - 1}`}
+                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  aria-label="Previous page"
+                >
+                  &larr; Prev
+                </Link>
+              )}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <Link
+                  key={p}
+                  href={p === 1 ? `/` : `/page/${p}`}
+                  className={`${
+                    p === currentPage
+                      ? 'font-bold text-gray-900 dark:text-gray-100'
+                      : 'text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
+                  } px-2`}
+                  aria-label={`Go to page ${p}`}
+                >
+                  {p}
+                </Link>
+              ))}
+              {currentPage < totalPages && (
+                <Link
+                  href={`/page/${currentPage + 1}`}
+                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  aria-label="Next page"
+                >
+                  Next &rarr;
+                </Link>
+              )}
+            </div>
+            <div className="justify-self-end">
+              <Link
+                href="/blog"
+                className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                aria-label="All posts"
+              >
+                All Posts &rarr;
+              </Link>
+            </div>
+          </div>
         </div>
       )}
       {siteMetadata.newsletter?.provider && (

@@ -38,43 +38,35 @@ export default async function Page() {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'WebSite',
-              name: 'Deeper Thoughts - Blog',
-              alternateName: 'Rohith Shinoj',
-              url: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
-            }),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'Deeper Thoughts',
-              url: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
-              logo: 'https://www.deeper-thoughts-blog.rohithshinoj.com/logo.png',
-            }),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Blog',
-              name: 'Deeper Thoughts',
-              url: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
-              description:
-                'Exploring AI systems and deep learning architectures — one idea at a time.',
-              publisher: {
-                '@type': 'Organization',
-                name: 'Deeper Thoughts',
-                logo: {
-                  '@type': 'ImageObject',
-                  url: 'https://www.deeper-thoughts-blog.rohithshinoj.com/logo.png',
+              '@graph': [
+                {
+                  '@type': 'WebSite',
+                  name: 'Deeper Thoughts - Blog',
+                  alternateName: 'Rohith Shinoj',
+                  url: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
                 },
-              },
+                {
+                  '@type': 'Organization',
+                  name: 'Deeper Thoughts',
+                  url: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
+                  logo: 'https://www.deeper-thoughts-blog.rohithshinoj.com/logo.png',
+                },
+                {
+                  '@type': 'Blog',
+                  name: 'Deeper Thoughts',
+                  url: 'https://www.deeper-thoughts-blog.rohithshinoj.com',
+                  description:
+                    'Exploring AI systems and deep learning architectures — one idea at a time.',
+                  publisher: {
+                    '@type': 'Organization',
+                    name: 'Deeper Thoughts',
+                    logo: {
+                      '@type': 'ImageObject',
+                      url: 'https://www.deeper-thoughts-blog.rohithshinoj.com/logo.png',
+                    },
+                  },
+                },
+              ],
             }),
           }}
         />

@@ -32,6 +32,13 @@ interface LayoutProps {
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
   const { filePath, path, slug, date, title, tags } = content
+  const hasCustomAuthor =
+    Array.isArray((content as unknown as { authors?: string[] }).authors) &&
+    (content as unknown as { authors?: string[] }).authors!.filter(Boolean).length > 0 &&
+    (content as unknown as { authors?: string[] }).authors![0] !== 'default'
+  const customAuthorName = hasCustomAuthor
+    ? (content as unknown as { authors?: string[] }).authors![0]
+    : undefined
   const basePath = path.split('/')[0]
 
   const breadcrumbs = [
@@ -71,36 +78,54 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 <dt className="sr-only">Authors</dt>
                 <dd>
                   <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-y-8 xl:space-x-0">
-                    {authorDetails.map((author) => (
-                      <li className="flex items-center space-x-2" key={author.name}>
-                        {author.avatar && (
-                          <Image
-                            src={author.avatar}
-                            width={38}
-                            height={38}
-                            alt="avatar"
-                            className="h-10 w-10 rounded-full"
-                          />
-                        )}
+                    {hasCustomAuthor ? (
+                      <li className="flex items-center space-x-2" key={customAuthorName}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          className="h-10 w-10 rounded-full text-gray-400"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h2a5 5 0 0 1 10 0h2c0-3.866-3.134-7-7-7z" />
+                        </svg>
                         <dl className="text-sm leading-5 font-medium whitespace-nowrap">
                           <dt className="sr-only">Name</dt>
-                          <dd className="text-gray-800 dark:text-gray-100">{author.name}</dd>
-                          <dt className="sr-only">Twitter</dt>
-                          <dd>
-                            {author.twitter && (
-                              <Link
-                                href={author.twitter}
-                                className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                              >
-                                {author.twitter
-                                  .replace('https://twitter.com/', '@')
-                                  .replace('https://x.com/', '@')}
-                              </Link>
-                            )}
-                          </dd>
+                          <dd className="text-gray-800 dark:text-gray-100">{customAuthorName}</dd>
                         </dl>
                       </li>
-                    ))}
+                    ) : (
+                      authorDetails.map((author) => (
+                        <li className="flex items-center space-x-2" key={author.name}>
+                          {author.avatar && (
+                            <Image
+                              src={author.avatar}
+                              width={38}
+                              height={38}
+                              alt="avatar"
+                              className="h-10 w-10 rounded-full"
+                            />
+                          )}
+                          <dl className="text-sm leading-5 font-medium whitespace-nowrap">
+                            <dt className="sr-only">Name</dt>
+                            <dd className="text-gray-800 dark:text-gray-100">{author.name}</dd>
+                            <dt className="sr-only">Twitter</dt>
+                            <dd>
+                              {author.twitter && (
+                                <Link
+                                  href={author.twitter}
+                                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                                >
+                                  {author.twitter
+                                    .replace('https://twitter.com/', '@')
+                                    .replace('https://x.com/', '@')}
+                                </Link>
+                              )}
+                            </dd>
+                          </dl>
+                        </li>
+                      ))
+                    )}
                   </ul>
                 </dd>
               </dl>

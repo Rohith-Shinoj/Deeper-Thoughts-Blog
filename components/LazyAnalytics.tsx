@@ -1,19 +1,26 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export default function LazyAnalytics() {
-  useEffect(() => {
-    // Only load analytics after page is fully loaded
-    const timer = setTimeout(() => {
-      // Analytics will be loaded here
-    }, 2000) // 2 second delay
+  const [enabled, setEnabled] = useState(false)
 
-    return () => clearTimeout(timer)
+  useEffect(() => {
+    const enable = () => setEnabled(true)
+    // Enable analytics after first user interaction (click, scroll, keypress)
+    window.addEventListener('click', enable, { once: true })
+    window.addEventListener('scroll', enable, { once: true })
+    window.addEventListener('keydown', enable, { once: true })
+    return () => {
+      window.removeEventListener('click', enable)
+      window.removeEventListener('scroll', enable)
+      window.removeEventListener('keydown', enable)
+    }
   }, [])
 
+  if (!enabled) return null
   return (
     <>
       <Analytics />
