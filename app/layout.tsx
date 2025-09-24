@@ -9,6 +9,7 @@ import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import ScrollToTop from '@/components/ScrollToTop'
 import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
@@ -19,6 +20,8 @@ const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-space-grotesk',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 })
 
 export const metadata: Metadata = {
@@ -139,6 +142,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           content="Y30rOgmn0prJFAn0sMmt0yNVLdipiySeM0B3Uwk71bo"
         />
         <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         {GA_ID && (
           <>
             <Script
@@ -165,6 +171,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <SectionContainer>
               <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
+                <ScrollToTop />
                 {/* Semantic header and H1 for SEO */}
                 <header>
                   <Header />
