@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react'
 import { useState } from 'react'
 import SocialIcon from '@/components/social-icons'
 
-const MAX_DISPLAY = 6
+const MAX_DISPLAY = 8
 
 interface Post {
   slug: string
