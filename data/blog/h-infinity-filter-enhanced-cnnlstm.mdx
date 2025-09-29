@@ -1,0 +1,93 @@
+---
+title: 'Bridging Control Systems and AI: The H∞ Filter Enhanced CNN-LSTM'
+date: '2025-09-16'
+lastmod: '2025-06-16'
+authors: ['default']
+tags: ['LSTM', 'CNNs', 'Computer Vision', 'Audio Processing', 'Deep Learning', 'Healthcare']
+draft: false
+summary: 'In this article, I explore a novel deep learning architecture from a recent publication of mine that integrates the H∞ filter from control theory into a CNN-LSTM framework to enhance robustness against noise and class imbalance in arrhythmia detection from heart sound recordings. Our approach achieves state-of-the-art performance on the PhysioNet CinC Challenge 2016 dataset, demonstrating its potential for scalable and reliable cardiac screening.'
+thumbnail: /static/images/HInf/thumbnail.png
+---
+
+Models today are getting bigger and smarter, surpassing new benchmarks every other day. Yet, for all their sophistication, most of the focus is on achieving peak performance on pristine, well-behaved datasets. This often makes us forget one equally important factor: **noise**. Real-world observations are inherently noisy and don't always adhere to perfect benchmarks, and this is one of the issues we try to tackle through this work. This is a crucial issue, especially in medicine, and it's precisely what we've tackled through our latest work on **arrhythmia detection** from heart sound recordings.
+
+---
+
+## The Problem: When Real-World Noise Obscures a Life-Saving Diagnosis
+
+Cardiovascular diseases (CVDs) remain the foremost cause of mortality worldwide. The early detection of irregularities like **heart arrhythmias** (rhythms that are too fast, too slow, or erratic) is crucial to preventing severe complications such as strokes, heart failure, and cardiac arrest.
+
+While deep learning has emerged as a powerful tool to automate the diagnosis of heart conditions from audio recordings—specifically **phonocardiograms (PCG)**—existing models often struggle to generalize when faced with the messy reality of clinical data.
+
+The challenges, as seen in the PhysioNet CinC Challenge 2016 dataset, are threefold:
+
+1. **Noise and Artifacts:** Real heart sound recordings are full of noise components and high-frequency artifacts that can drastically impair the performance of arrhythmia detection models.
+2. **Small and Imbalanced Datasets:** Biomedical data is often limited, and the distribution is severely skewed. The dataset we used shows a notable skew, with roughly **87%** (5154 samples) classified as normal, and a minority (771 samples) as abnormal heart sounds.
+3. **Generalization:** Current models often struggle to generalize well in real-world scenarios, especially when dealing with small or noisy datasets.
+
+We set out to build an architecture that is not just accurate but also **robust** to these real-world challenges.
+
+---
+
+## An Adaptive Memory Inspired by Control Theory - The H$_{\infty}$ Filter Enhanced CNN-LSTM
+
+Before any deep model sees the data, we apply a dual-stage denoising pipeline to each heart sound. First, a discrete wavelet transform breaks the audio into multi-scale frequency components, capturing the rhythmic structure across time scales. Next, a low-pass IIR (Infinite Impulse Response) filter smooths the wavelet result, suppressing high-frequency artifacts that usually carry noise, which are later converted into Mel Spectrograms.
+![Mel spectrogram](/static/images/HInf/mel.png)
+Our solution is a novel deep learning architecture called the **CNN-H$_{\infty}$-LSTM**, which processes **Mel spectrograms** of heart rhythm audio. The CNN layers identify spatial features, while the LSTM layers track temporal dependencies.
+
+### Re-engineering the LSTM Cell: H$_{\infty}$ Filter Integration
+
+We substituted the default **forget gate** of the LSTM with a parameterized mechanism inspired by the **H-Infinity ($H_{\infty}$) filter** from control theory, creating a new recurrent unit called the $H_{\infty}$ LSTM cell.
+
+![H-infinity Filter Enhanced LSTM Cell](/static/images/HInf/cell.png)
+
+The $H_{\infty}$ filter is designed to provide a guaranteed bound on estimation error even under unknown-but-bounded disturbances and model inaccuracies. By passing a trainable parameter $K_{filter}$ through a sigmoid activation to derive a robustness coefficient, $\lambda_{h}$ ], our model can dynamically control the trade-off between retaining past memory and incorporating new information. This allows the model to learn a **more robust, data-driven forgetting mechanism** compared to the gradient-based updates in standard LSTMs
+
+![H-infinity Filter Enhanced CNN-LSTM Architecture](/static/images/HInf/architecture.png)
+
+Our architecture combines the strengths of Convolutional Neural Networks (CNNs) and Recurrent Neural Networks (RNNs).
+
+- **CNN for Spatial Feature Extraction**: The spectrogram is first processed by a series of convolutional blocks. Each block contains two **3x3 convolutional layers** with "same" padding, followed by **Batch Normalization** to stabilize training and a **2x2 MaxPooling layer** to downsample the feature maps.
+- **The H$_{\infty}$-LSTM for Temporal Analysis**: The core innovation lies in replacing the standard LSTM **forget gate** with a mechanism inspired by the **H-Infinity ($H_{\infty}$) filter**. While a normal LSTM computes its cell state as $c_{t}=f_{t}c_{t-1}+i_{t}\tilde{c}_{t}$, our version replaces the volatile forget gate ($f_t$) with a stable, learnable **robustness coefficient ($\lambda_{h}$)**:
+
+  $c_{t}=(1-\lambda_{h})c_{t-1}+\lambda_{h}i_{t}\tilde{c}_{t}$
+
+  This provides a guaranteed bound on estimation error, allowing the model's memory to remain stable even when processing noisy, unpredictable inputs.
+
+### Tackling Class Imbalance
+
+To address the extreme skew in the data, we introduced a custom training strategy:
+
+- **Penalty-Weighted Loss (PWL):** This custom loss function dynamically adjusts the loss based on the model's misclassification behavior, with a particular focus on **false negatives** and **false positives**, which are critical in medical diagnosis.
+  ![Penalty Weighted Loss Function](/static/images/HInf/loss.png)
+- **Stochastic Adaptive Probe Thresholding (SAPT):** This adaptive framework dynamically learns the optimal decision threshold $\tau^{*}$ during training to maximize a task-specific metric like the F1-score. This prevents the model from being biased towards the majority class.
+
+---
+
+## Real-World Impact: High-Performance, Accessible Diagnostics
+
+The proposed $\text{CNN-H}_{\infty}\text{-LSTM}$ model achieved state-of-the-art results on the benchmark PhysioNet CinC Challenge 2016 dataset, demonstrating superior performance over pre-trained audio and vision models, as well as existing approaches.
+
+| Model                               | F1 (%)    | Acc. (%)  | Sens. (%) | Spec. (%) |
+| :---------------------------------- | :-------- | :-------- | :-------- | :-------- |
+| **CNN-H$_{\infty}$-LSTM with SAPT** | **98.85** | **99.42** | **99.23** | **99.49** |
+| CRNN [9]                            | 98.34     | 98.34     | 98.66     | 98.01     |
+| CNN-LSTM with SAPT                  | 96.19     | 98.16     | 94.69     | 99.29     |
+| ResNet-50                           | 89.68     | 88.94     | 93.83     | 83.82     |
+
+![Accuracy Comparison](/static/images/HInf/accuracy.png)
+![Loss Comparison](/static/images/HInf/loss.png)
+
+Why the leap? The H∞ filtering makes the temporal model highly robust to real-world distortions, and the custom training loss/threshold ensure sensitivity to the rare positives. Together, the network isn’t just memorizing “clean” samples; it’s learning to ignore spurious noise.
+This high level of performance means a more reliable system that can significantly change how we approach cardiac screening:
+
+- **Robustness in Clinics:** The integration of the $H_{\infty}$ filter improves robustness against noise and variability, leading to a higher degree of generalization on small and noisy datasets. This is crucial for clinical settings.
+- **Scalable and Low-Cost Screening:** The end-to-end design enables **real-time deployment on mobile or edge devices**, supporting scalable and low-cost cardiac screening.
+
+By prioritizing **robustness** and intelligently handling the imperfections of real-world data, the $\text{CNN-H}_{\infty}\text{-LSTM}$ architecture takes us a critical step closer to delivering scalable, highly reliable, and life-saving cardiac screening to a global population.
+
+## Future Work
+
+Modern ML must move beyond chasing leaderboard scores on pristine data. Especially in healthcare and edge computing, we deal with low-power devices and messy signals. The H∞-augmented LSTM is an example of bringing control-theoretic robustness into deep nets, acting like an automatic noise filter built into the model.
+
+Looking ahead, such techniques – robust filtering, adaptive thresholds, loss shaping – should become more mainstream as ML expands into the wild and we move closer to ML systems that work in practice, not just in theory
