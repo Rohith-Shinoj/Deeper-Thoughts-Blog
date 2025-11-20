@@ -20,6 +20,7 @@ interface Post {
   authors?: string[]
   tags: string[]
   thumbnail?: string
+  readingTime?: string
 }
 
 export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIndex?: number }) {
@@ -291,7 +292,7 @@ export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIn
             {filteredPosts
               .slice(startIndex, startIndex + Math.min(visibleCount, MAX_DISPLAY))
               .map((post) => {
-                const { slug, date, title, summary, tags, thumbnail } = post
+                const { slug, date, title, summary, tags, thumbnail, readingTime } = post
                 return (
                   <li key={slug} className="py-12">
                     <article>
@@ -336,7 +337,26 @@ export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIn
                               {summary}
                             </div>
                           </div>
-                          <div className="text-base leading-6 font-medium">
+                          <div className="flex items-center justify-start gap-x-4 text-base leading-6 font-medium">
+                            {readingTime && (
+                              <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="mr-1.5 h-5 w-5"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  />
+                                </svg>
+                                {readingTime}
+                              </div>
+                            )}
                             <Link
                               href={`/blog/${slug}`}
                               className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"

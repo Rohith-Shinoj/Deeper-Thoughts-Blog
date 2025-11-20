@@ -1,0 +1,82 @@
+---
+title: 'Physics-Informed Neural Networks: What, Why, and How'
+date: '2025-10-23'
+lastmod: '2025-10-31'
+authors: ['default']
+tags: ['Generative AI', 'Interpretability', 'Scientific Computing']
+draft: false
+summary: 'Physics-Informed Neural Networks (PINNs) are a groundbreaking class of models that merge these two worlds, creating neural networks that are constrained by the laws of physics. This article explores how PINNs work, why they are revolutionizing scientific computing, and what their future holds.'
+thumbnail: /static/images/pinn/thumbnail.png
+---
+
+In the world of scientific modeling, a long-standing dichotomy exists. On one side, we have theory-driven models, built on centuries of established physical laws expressed as differential equations. These models are robust and interpretable but often struggle with complex, real-world systems where the governing equations are only partially known. On the other side, we have data-driven models, like traditional neural networks, which excel at finding patterns in large datasets but operate as "black boxes" with little regard for the underlying physical principles.
+
+Physics-Informed Neural Networks (PINNs) offer a powerful synthesis of these two paradigms. A PINN is a neural network that is trained to not only fit observed data but also to obey the laws of physics, described by a set of partial differential equations (PDEs). This fusion allows PINNs to make accurate predictions even in scenarios with sparse or noisy data, leveraging the governing equations as a form of regularization to constrain the space of possible solutions.
+
+<TOCInline toc={props.toc} exclude="Introduction" />
+
+## What are Physics-Informed Neural Networks?
+
+At its core, a PINN is a standard feedforward neural network that takes spatial and temporal coordinates (e.g., `x`, `y`, `t`) as input and outputs the corresponding physical quantities (e.g., temperature, velocity, pressure). The key innovation lies not in the architecture but in the loss function used during training.
+
+Instead of just minimizing the difference between the model's predictions and the observed data, a PINN's loss function includes a second component: a term that penalizes the network if its output violates the underlying physical laws. This physics-based loss term ensures that the learned solution is not just data-consistent but also physically plausible.
+
+![PINN Architecture](/static/images/pinn/architecture.png)
+
+_A schematic of a Physics-Informed Neural Network. The loss function is a combination of the data loss (from labeled points) and the physics loss (from collocation points where the PDE residual is evaluated)._
+
+## The Anatomy of a PINN's Loss Function
+
+The magic of a PINN is its composite loss function, which guides the network to a physically valid solution. It is typically composed of two main parts:
+
+1.  **Data Loss (L_data):** This is the standard supervised learning loss, usually the Mean Squared Error (MSE), calculated on a set of known data points. It measures how well the network's output `u(x, t)` matches the observed data `u_observed`.
+
+    $$
+    L_{data} = \frac{1}{N_{data}} \sum_{i=1}^{N_{data}} |u(x_i, t_i) - u_{observed}|^2
+    $$
+
+2.  **Physics Loss (L_physics):** This term enforces the structure of the governing PDE. It is calculated on a set of "collocation points" spread across the domain. At these points, the network's output is differentiated with respect to its inputs using automatic differentiation to compute the residual of the PDE. The goal is to make this residual as close to zero as possible. For a general PDE of the form `F(u, ∇u, ∇²u, ...) = 0`, the physics loss is:
+
+    $$
+    L_{physics} = \frac{1}{N_{physics}} \sum_{j=1}^{N_{physics}} |F(u(x_j, t_j))|^2
+    $$
+
+The total loss is a weighted sum of these two components: `L = L_data + λ * L_physics`, where `λ` is a hyperparameter that balances the contribution of the two terms.
+
+## How PINNs Learn Physics with Automatic Differentiation
+
+The ability of PINNs to enforce physical laws hinges on a powerful technique called **automatic differentiation (AD)**. Unlike numerical differentiation, which is prone to approximation errors, or symbolic differentiation, which can lead to complex expressions, AD computes exact derivatives of the network's output with respect to its inputs.
+
+During training, for each collocation point, the PINN's output `u` is passed through the AD engine to compute the necessary derivatives (e.g., `∂u/∂t`, `∂²u/∂x²`). These derivatives are then plugged into the PDE's formula to get the physics residual. The backpropagation algorithm then minimizes this residual, effectively "teaching" the neural network to satisfy the differential equation across the entire domain.
+
+This process allows the PINN to act as a continuous, differentiable function that approximates the solution of the PDE, even in regions where no data is available.
+
+## PINNs vs. Traditional Solvers
+
+PINNs are not a universal replacement for traditional numerical solvers like the Finite Element Method (FEM) or Finite Difference Method (FDM), but they offer distinct advantages in certain scenarios.
+
+| **Aspect**                      | **Traditional Solvers (FEM, FDM)**                                                        | **Physics-Informed Neural Networks (PINNs)**                                              |
+| ------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Mesh Requirement**            | Requires a discrete mesh, which can be complex and computationally expensive to generate. | Mesh-free; operates on continuous coordinates, simplifying complex geometries.            |
+| **Data Handling**               | Primarily designed for forward problems where the equation is fully known.                | Can solve both forward and inverse problems (e.g., inferring model parameters from data). |
+| **Computational Cost**          | Can be very fast for well-posed problems.                                                 | Training can be slow and computationally intensive, but inference is very fast.           |
+| **Generalization**              | The solution is only computed at discrete mesh points.                                    | Provides a continuous, differentiable solution over the entire domain.                    |
+| **Handling Ill-Posed Problems** | Struggle with problems where boundary conditions or parameters are unknown.               | Can handle ill-posed problems by leveraging data to constrain the solution.               |
+| **Dimensionality**              | Suffers from the "curse of dimensionality"; cost grows exponentially with dimensions.     | Shows promise in solving high-dimensional PDEs where traditional methods fail.            |
+
+## Applications and Future Directions
+
+PINNs are already being applied to a wide range of scientific and engineering problems, including:
+
+- **Fluid Dynamics:** Simulating turbulent flows and solving the Navier-Stokes equations.
+- **Heat Transfer:** Modeling heat dissipation in electronic components.
+- **Biomedical Engineering:** Simulating blood flow in arteries and modeling tumor growth.
+- **Quantum Mechanics:** Solving the Schrödinger equation for quantum systems.
+
+Despite their success, PINNs face several challenges. Training can be difficult, with issues like vanishing or exploding gradients, and scaling to very complex, multi-scale systems remains an active area of research.
+
+The future of PINNs lies in developing more robust training algorithms, creating more complex hybrid models, and integrating them into existing scientific computing workflows. As data becomes more abundant and computational resources grow, the fusion of data-driven learning and physics-based modeling promises to unlock new frontiers in scientific discovery, enabling us to model the world with unprecedented accuracy and insight.
+
+---
+
+_Enjoyed this post? <a href="https://deeper-thoughts-blog.rohithshinoj.com#newsletter" target="_self">Subscribe to the Newsletter</a> for more deep dives into ML infrastructure, interpretibility, and applied AI engineering or check out other posts at <a href="https://deeper-thoughts-blog.rohithshinoj.com" target="_self">Deeper Thoughts</a>_

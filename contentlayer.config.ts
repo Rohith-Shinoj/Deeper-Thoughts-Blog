@@ -43,7 +43,7 @@ const icon = fromHtmlIsomorphic(
 )
 
 const computedFields: ComputedFields = {
-  readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
+  readingTime: { type: 'string', resolve: (doc) => readingTime(doc.body.raw).text },
   slug: {
     type: 'string',
     resolve: (doc) => doc._raw.flattenedPath.replace(/^.+?(\/)/, ''),
@@ -67,7 +67,7 @@ async function createTagCount(allBlogs) {
   allBlogs.forEach((file) => {
     if (file.tags && (!isProduction || file.draft !== true)) {
       file.tags.forEach((tag) => {
-        const formattedTag = slug(tag)
+        const formattedTag = tag
         if (formattedTag in tagCount) {
           tagCount[formattedTag] += 1
         } else {
@@ -95,7 +95,7 @@ function createSearchIndex(allBlogs) {
 
 export const Blog = defineDocumentType(() => ({
   name: 'Blog',
-  filePathPattern: 'blog/**/*.mdx',
+  filePathPattern: '{blog,drafts}/**/*.mdx',
   contentType: 'mdx',
   fields: {
     title: { type: 'string', required: true },
