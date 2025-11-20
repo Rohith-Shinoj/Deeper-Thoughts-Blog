@@ -59,6 +59,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [siteMetadata.socialBanner],
   },
+  verification: {
+    google: 'Y30rOgmn0prJFAn0sMmt0yNVLdipiySeM0B3Uwk71bo',
+  },
   manifest: '/site.webmanifest',
   applicationName: siteMetadata.title,
   appleWebApp: {
@@ -73,7 +76,10 @@ export const metadata: Metadata = {
     icon: [
       { url: '/static/favicons/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/static/favicons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/static/favicons/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { rel: 'icon', type: 'image/svg+xml', url: '/static/favicons/favicon.svg' },
     ],
+    shortcut: ['/static/favicons/favicon.ico'],
     apple: [{ url: '/static/favicons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
     other: [
       { url: '/static/favicons/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -93,52 +99,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <head>
-        {/* <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href={`${basePath}/static/favicons/apple-touch-icon.png`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href={`${basePath}/static/favicons/favicon-32x32.png`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href={`${basePath}/static/favicons/favicon-16x16.png`}
-        />
-        <link rel="manifest" href="/site.webmanifest" /> */}
-
-        <link
-          rel="icon"
-          type="image/png"
-          href={`${basePath}/static/favicons/favicon-96x96.png`}
-          sizes="96x96"
-        />
-        <link rel="icon" type="image/svg+xml" href={`${basePath}/static/favicons/favicon.svg`} />
-        <link rel="shortcut icon" href={`${basePath}/static/favicons/favicon.ico`} />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href={`${basePath}/static/favicons/apple-touch-icon.png`}
-        />
-        <meta name="apple-mobile-web-app-title" content="Deeper Thoughts" />
-        <link rel="manifest" href="/site.webmanifest" />
-
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        {/* <meta name="apple-mobile-web-app-title" content={siteMetadata.title} /> */}
-        {/* <meta name="mobile-web-app-capable" content="yes" /> */}
-        <meta
-          name="google-site-verification"
-          content="Y30rOgmn0prJFAn0sMmt0yNVLdipiySeM0B3Uwk71bo"
-        />
         <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -159,6 +122,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Script>
           </>
         )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "url": "${siteMetadata.siteUrl}",
+  "name": "${siteMetadata.title}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "${siteMetadata.siteUrl}/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+`,
+          }}
+        />
       </head>
 
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
@@ -169,7 +153,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <SectionContainer>
               <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
-                <ScrollToTop />
+                <ScrollTopAndComment />
                 {/* Semantic header and H1 for SEO */}
                 <header>
                   <Header />
