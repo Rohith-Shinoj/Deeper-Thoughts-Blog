@@ -47,9 +47,43 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
     { name: title },
   ]
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${siteMetadata.siteUrl}/${path}`,
+    },
+    headline: title,
+    datePublished: date,
+    dateModified: date,
+    author: [
+      {
+        '@type': 'Person',
+        name: siteMetadata.author,
+        url: siteMetadata.twitter,
+        sameAs: [siteMetadata.github, siteMetadata.linkedin, 'https://www.rohithshinoj.com'],
+      },
+    ],
+    publisher: {
+      '@type': 'Organization',
+      name: siteMetadata.title,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteMetadata.siteUrl}${siteMetadata.siteLogo}`,
+      },
+    },
+    description: content.summary,
+    image: `${siteMetadata.siteUrl}${siteMetadata.socialBanner}`,
+  }
+
   return (
     <SectionContainer>
       <ScrollTopAndComment />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article>
         <Breadcrumbs items={breadcrumbs} />
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">

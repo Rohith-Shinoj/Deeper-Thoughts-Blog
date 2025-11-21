@@ -12,6 +12,7 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import ScrollToTop from '@/components/ScrollToTop'
 import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
+import ScrollRestoration from '@/components/ScrollRestoration'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 import Script from 'next/script'
@@ -150,6 +151,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ThemeProviders>
             <Analytics />
             <SpeedInsights />
+            <ScrollRestoration />
 
             <SectionContainer>
               <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
