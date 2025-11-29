@@ -1,0 +1,81 @@
+---
+title: 'Graph Neural Networks'
+date: '2025-11-23'
+lastmod: '2025-11-23'
+authors: ['default']
+tags: ['GNN', 'Deep Learning', 'multimodality']
+draft: false
+summary: 'From social networks to molecular structures, much of the worlds most valuable data is not in tables or sequences, but in interconnected graphs. This article dives into how Graph Neural Networks (GNNs) work, what makes them unique, and why they are becoming an indispensable tool in modern AI.'
+thumbnail: /static/images/gnn/thumbnail.png
+---
+
+For decades, deep learning has achieved remarkable success by processing data with a regular, grid-like structure. Convolutional Neural Networks (CNNs) excel at understanding images (a grid of pixels), while Recurrent Neural Networks (RNNs) and Transformers master sequential data like text (a sequence of words). However, many real-world problems involve data that is inherently irregular and relational—data best represented as a graph.
+
+Think of a social network, where users are nodes and friendships are edges. Or a molecule, where atoms are nodes and chemical bonds are edges. Or even a financial system, where accounts are nodes and transactions are edges. Traditional models struggle with this kind of data because they cannot capture the rich, complex relationships between entities. This is where Graph Neural Networks (GNNs) come in, providing a framework to learn directly from graph-structured data.
+
+<TOCInline toc={props.toc} exclude="Introduction" />
+
+## What is a Graph? The Foundation of GNNs
+
+At its core, a graph is a simple but powerful data structure used to represent relationships. It consists of two main components:
+
+- **Nodes (or Vertices):** These are the fundamental entities or objects in the system. In a social network, a node could be a user profile.
+- **Edges (or Links):** These represent the connections or relationships between nodes. An edge could represent a friendship, a follow, or a message between two users.
+
+![Graphs](/static/images/gnn/graph.png)
+
+Graphs can be simple or incredibly rich. Edges can have directions (e.g., a "follows" relationship on Twitter) or be undirected (a "friendship" on Facebook). Both nodes and edges can also store information in the form of **features**. A user node might have features like age, location, and interests. A transaction edge might have features like the amount, time, and type of transaction. GNNs are designed to leverage all of this information—the structure of the graph and the features of its components.
+
+## How GNNs "Think": The Message Passing Mechanism
+
+The central innovation of GNNs is a process called **message passing**, which allows nodes to learn from their local neighborhood. The core idea is that each node's representation (or "embedding") should be influenced by the nodes it is connected to. This process is typically repeated in layers, allowing information to propagate across the entire graph.
+
+A single layer of message passing can be broken down into three key steps:
+
+1.  **Message Generation:** For a given node, each of its neighbors generates a "message." This message is usually created by transforming the neighbor's feature vector using a learned neural network (like a simple linear layer).
+2.  **Aggregation:** The node then collects the messages from all its neighbors and aggregates them into a single vector. Common aggregation functions include sum, mean, or max. This step ensures that the model can handle a variable number of neighbors for each node.
+3.  **Update:** Finally, the node updates its own embedding by combining its current embedding with the aggregated message. This is also done using a learnable neural network, often incorporating a non-linear activation function.
+
+![Working of a GNN](/static/images/gnn/gnn.jpg)
+
+By stacking these layers, a node's embedding after _k_ layers will contain information from all nodes up to _k_ hops away. This allows the GNN to learn complex, multi-scale patterns within the graph structure.
+
+## GNN Architectures
+
+The message passing framework is a general blueprint, and many different GNN architectures have been proposed, each with its own twist on the aggregation and update steps.
+
+| **Architecture**                      | **Core Idea**                                                                                                      | **Key Characteristic**                                                                             |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| **Graph Convolutional Network (GCN)** | Simplifies the graph convolution by averaging the feature vectors of a node's neighbors (including itself).        | A simple, efficient, and popular baseline. Can be seen as a special case of message passing.       |
+| **GraphSAGE**                         | Samples a fixed number of neighbors for each node before aggregating, improving scalability for large graphs.      | Inductive—can generalize to unseen nodes. Offers flexible aggregator functions (mean, pool, LSTM). |
+| **Graph Attention Network (GAT)**     | Allows nodes to assign different levels of importance (attention) to their neighbors' messages during aggregation. | More expressive than GCNs, as it can learn which neighbors are more relevant.                      |
+
+These models represent a progression from simple neighborhood averaging to more sophisticated, scalable, and expressive ways of learning from graph data.
+![GNN Architectures](/static/images/gnn/architectures.png)
+
+## What Can GNNs Do? Real-World Applications
+
+The ability to learn from relational data has unlocked a wide range of applications across various industries:
+
+- **Recommender Systems:** In platforms like Amazon or Netflix, GNNs can model the graph of users and items. By learning from user-item interactions, they can generate more accurate and diverse recommendations.
+- **Drug Discovery and Biology:** GNNs are revolutionizing molecular biology. By treating molecules as graphs, they can predict protein functions, identify potential new drug candidates, and understand complex biological interaction networks.
+- **Fraud Detection:** In finance, GNNs can analyze transaction graphs to identify anomalous patterns indicative of fraud. A fraudulent account might have unusual connections or participate in suspicious transaction rings that GNNs are adept at spotting.
+- **Traffic and Route Prediction:** Services like Google Maps can model road networks as graphs, where nodes are intersections and edges are roads. GNNs can predict traffic flow, estimate arrival times, and suggest optimal routes by learning from real-time traffic data.
+
+## The Challenges and the Future
+
+Despite their success, GNNs are not without challenges. Key areas of ongoing research include:
+
+- **Scalability:** The message passing mechanism can be computationally expensive on massive, real-world graphs with billions of nodes and edges (like the entire web graph).
+- **Dynamic Graphs:** Many graphs are not static; they evolve over time as new nodes and edges are added or removed. Developing GNNs that can efficiently handle these dynamic changes is a major research frontier.
+- **Oversmoothing:** As information propagates through many GNN layers, the embeddings of different nodes can become too similar, losing their distinctiveness. This makes it difficult to build very deep GNNs.
+
+Looking forward, the future of GNNs is bright. Researchers are exploring ways to combine them with other powerful models, like Transformers, to better capture long-range dependencies in graphs. New frontiers like explainable GNNs, which aim to make their predictions more interpretable, and their application to fields like causal reasoning and physics simulation promise to further expand their impact.
+
+## Conclusion
+
+Graph Neural Networks represent a fundamental step toward building more general and powerful AI systems in world that is inherently structured and interconnected. By moving beyond the grids and sequences that have dominated deep learning, GNNs allow us to model complex relationships and unlock insights from data that was previously inaccessible. As our ability to collect and represent relational data grows, GNNs will undoubtedly become an even more critical tool for connecting the dots and understanding the complex systems that shape our world.
+
+---
+
+_Enjoyed this post? <a href="https://deeper-thoughts-blog.rohithshinoj.com#newsletter" target="_self">Subscribe to the Newsletter</a> for more deep dives into ML infrastructure, interpretibility, and applied AI engineering or check out other posts at <a href="https://deeper-thoughts-blog.rohithshinoj.com" target="_self">Deeper Thoughts</a>_
