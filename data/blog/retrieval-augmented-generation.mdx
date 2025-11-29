@@ -41,7 +41,7 @@ When a user asks a question, RAG's runtime process kicks in as shown above.
 - Those retrieved passages are then inserted into the prompt (often via a template like <code>“Use these facts to answer: `{context}`…”)</code> so the LLM can reason over them.
 - The model generates a human-like answer that is explicitly based on the retrieved facts.
 
-Because the LLM now “sees” the evidence in its context, it tends to be more accurate and specific. In fact, RAG can dramatically improve answer clarity: by grounding generation in real data, it reduces the risk of hallucination and ensures up-to-date or proprietary information can be leveraged
+Because the LLM now “sees” the evidence in its context, it tends to be more accurate and specific. In fact, RAG can dramatically improve answer clarity: by grounding generation in real data, it reduces the risk of hallucination and ensures up-to-date or proprietary information can be leveraged. For a deeper discussion on the causes of LLM hallucination and how RAG helps mitigate it, read my article on ["Is Your LLM Lying to You?"](./is-your-llm-lying-to-you).
 
 ---
 
@@ -57,7 +57,7 @@ Because it combines the strengths of search and generation, RAG finds itself in 
 
 - **Fact-Checking and Grounded Generation**: For any generative task where facts matter (like summarizing news or writing reports), RAG can retrieve verified data to cite. This leads to more reliable and relevant outputs.
 
-In short, RAG is a general pattern whenever you need an LLM to produce answers tied closely to a specific dataset. It has been popularized as the backbone of knowledge-augmented chatbots and AI assistants
+In short, RAG is a general pattern whenever you need an LLM to produce answers tied closely to a specific dataset. It has been popularized as the backbone of knowledge-augmented chatbots and AI assistants. For a broader perspective on how RAG integrates into the architecture of intelligent, decision-making systems, read my article on [AI Agents and Autonomous Systems](./ai-agents-and-autonomous-systems).
 
 ---
 

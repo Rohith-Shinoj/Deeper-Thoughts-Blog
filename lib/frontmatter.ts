@@ -29,6 +29,7 @@ export function generateFrontmatterTemplate(fileContent: string): string {
   const { content } = matter(fileContent)
   const oldFrontmatterString = content.split('---')[1]
 
+  const { content: fileBody } = matter(fileContent)
   const newFrontmatterString = oldFrontmatterString
     .split('\n')
     .map((line) => {
@@ -45,5 +46,5 @@ export function generateFrontmatterTemplate(fileContent: string): string {
     })
     .join('\n')
 
-  return `---\n${newFrontmatterString}\n---\n\n# Start writing below`
+  return `---\n${newFrontmatterString}\n---${fileBody}`
 }

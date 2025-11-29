@@ -9,8 +9,6 @@ summary: "Why did my model classify this image as a 'cat'? This article dives de
 thumbnail: /static/images/attmap/thumbnail.png
 ---
 
-# Interpreting Vision Models: A Conceptual Guide to Grad-CAM and Attention Maps
-
 In the world of AI, getting a correct prediction is only half the battle. A model might correctly identify a wolf in a picture, but is it looking at the wolf, or the snow in the background? This is the core question that Explainable AI (XAI) seeks to answer. Without understanding the "why," we can't fully trust our models, debug their failures, or guard against them learning from spurious correlations.
 
 This article moves from the theory of XAI to the practical interpretation of two of the most popular visualization methods: Grad-CAM for Convolutional Neural Networks (CNNs) and Attention Maps for Vision Transformers (ViTs). Our focus will be less on code and more on the concepts: how these heatmaps are generated, what they tell us about the model's inner workings, and how to use them as a diagnostic tool.

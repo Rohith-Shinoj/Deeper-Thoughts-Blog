@@ -19,7 +19,7 @@ _To skip the explanations and move straight to code, jump over to [Loading Produ
 
 At a high level, a RAG system stores product information in a vector store and retrieves relevant snippets when the user asks a question. The LLM then uses those retrieved documents as context to generate an accurate answer. For example, if you ask “What are the camera specs of the iPhone 16?”, the system will fetch documents about the iPhone 16’s camera from the vector store, then let the LLM answer based on that.
 ![RAG Pipeline](/static/images/langchain/rag.png)
-LangChain is a popular open-source framework for LLM apps, and we’ll use it together with ChromaDB, an AI-native vector database. This article walks through loading product data, indexing it in Chroma, and using an LLM to answer questions. By the end, we will have designed a functioning “product knowledge bot” that can answer questions about the iPhone 16 from up-to-date information.
+LangChain is a popular open-source framework for LLM apps, and we’ll use it together with ChromaDB, an AI-native vector database. For a broader understanding of how such frameworks contribute to the development of intelligent, decision-making AI, read my article on [AI Agents and Autonomous Systems](./ai-agents-and-autonomous-systems). This article walks through loading product data, indexing it in Chroma, and using an LLM to answer questions. By the end, we will have designed a functioning “product knowledge bot” that can answer questions about the iPhone 16 from up-to-date information.
 
 ## ChromaDB: The Vector Store database
 

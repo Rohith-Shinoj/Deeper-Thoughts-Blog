@@ -27,7 +27,7 @@ Finally, the model classifies the image by looking at the [CLS] token. After the
 
 ## Self-Attention in Vision Transformers
 
-The core mechanism in a ViT is self-attention, borrowed from NLP but applied over image patches. At each encoder layer, every patch embedding is linearly projected to query (Q), key (K), and value (V) vectors. The attention weight between two patches is then computed by taking the dot product of their query and key, scaling by the square root of the dimension, and applying softmax. The updated embedding for each patch is the weighted sum of all patch values. Mathematically:
+The core mechanism in a ViT is self-attention, borrowed from NLP but applied over image patches. For a foundational understanding of how this powerful mechanism works, read my article on ["Beyond Attention"](./beyond-attention). At each encoder layer, every patch embedding is linearly projected to query (Q), key (K), and value (V) vectors. The attention weight between two patches is then computed by taking the dot product of their query and key, scaling by the square root of the dimension, and applying softmax. The updated embedding for each patch is the weighted sum of all patch values. Mathematically:
 
 $$
 \text{Attention}(Q, K, V) = \text{softmax}\left( \frac{QK^T}{\sqrt{d_k}} \right) V

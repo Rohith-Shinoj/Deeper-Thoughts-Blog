@@ -2,7 +2,15 @@
 
 import { useState } from 'react'
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
-import MDXComponents from './MDXComponents'
+import { components as MDXComponents } from './MDXComponents'
+
+type TocHeading = {
+  value: string
+  url: string
+  depth: number
+}
+
+type Toc = TocHeading[]
 
 export default function MdxEditor({
   content,
@@ -13,6 +21,7 @@ export default function MdxEditor({
 }) {
   const [isPreview, setIsPreview] = useState(false)
   const [previewContent, setPreviewContent] = useState<MDXRemoteSerializeResult | null>(null)
+  const [previewToc, setPreviewToc] = useState<Toc | null>(null)
 
   const handlePreview = async () => {
     const response = await fetch('/api/preview', {
@@ -24,8 +33,9 @@ export default function MdxEditor({
     })
 
     if (response.ok) {
-      const { source } = await response.json()
+      const { source, toc } = await response.json()
       setPreviewContent(source)
+      setPreviewToc(toc)
       setIsPreview(true)
     } else {
       alert('Failed to generate preview.')
@@ -49,14 +59,20 @@ export default function MdxEditor({
         </button>
       </div>
       {isPreview && previewContent ? (
-        <div className="prose dark:prose-dark max-w-none">
-          <MDXRemote {...previewContent} components={MDXComponents} />
+        <div className="h-[40rem] rounded-md border border-gray-300 bg-white p-2 dark:border-gray-600 dark:bg-gray-700">
+          <div className="prose dark:prose-invert h-full max-w-none overflow-auto">
+            <MDXRemote
+              {...previewContent}
+              components={MDXComponents}
+              scope={{ toc: previewToc }}
+            />{' '}
+          </div>
         </div>
       ) : (
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="h-full w-full rounded-md border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-700"
+          className="h-[30rem] w-full rounded-md border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-700"
         />
       )}
     </div>

@@ -6,20 +6,18 @@ import MdxEditor from '@/components/MdxEditor'
 
 export default function NewArticlePage() {
   const [content, setContent] = useState('')
-  const [frontmatterTemplate, setFrontmatterTemplate] = useState('')
 
   useEffect(() => {
     async function getFrontmatter() {
-      const response = await fetch('/api/frontmatter')
+      const response = await fetch(`/api/frontmatter?cache_bust=${Date.now()}`)
       const data = await response.json()
-      setFrontmatterTemplate(data.template)
       setContent(data.template)
     }
     getFrontmatter()
   }, [])
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <div className="w-2/3 p-4">
         <MdxEditor content={content} setContent={setContent} />
       </div>

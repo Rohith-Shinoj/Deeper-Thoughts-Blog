@@ -34,10 +34,15 @@ export async function POST(req: NextRequest) {
   const finalImagePath = path.join(process.cwd(), 'public', 'static', 'images', shortName)
 
   try {
-    // Move images
-    await fs.rename(tempImagePath, finalImagePath)
+    await fs.access(tempImagePath)
+    try {
+      await fs.rename(tempImagePath, finalImagePath)
+    } catch (error) {
+      console.error('Failed to move images:', error)
+      return NextResponse.json({ error: 'Failed to move images' }, { status: 500 })
+    }
   } catch (error) {
-    // Ignore if temp dir doesn't exist
+    // If tempImagePath does not exist, do nothing.
   }
 
   const mdxPath = `data/blog/${mdxFileName}`
@@ -57,12 +62,17 @@ export async function POST(req: NextRequest) {
       sha,
     })
 
-    const files = []
+    const files: {
+      path: string
+      mode: '100644'
+      type: 'blob'
+      content: string
+    }[] = []
     // MDX file
     files.push({
       path: mdxPath,
       mode: '100644',
-      type: 'commit',
+      type: 'blob',
       content: mdx,
     })
 
@@ -76,9 +86,8 @@ export async function POST(req: NextRequest) {
         files.push({
           path: `public/static/images/${shortName}/${imageFile}`,
           mode: '100644',
-          type: 'commit',
+          type: 'blob',
           content: imageContent,
-          encoding: 'base64',
         })
       }
     } catch (error) {

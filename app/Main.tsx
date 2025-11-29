@@ -27,15 +27,8 @@ export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIn
   const [selectedTag, setSelectedTag] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [showSearch, setShowSearch] = useState(false)
-  const [showAddArticle, setShowAddArticle] = useState(false)
   const [visibleCount, setVisibleCount] = useState(Math.min(3, posts.length))
   const sentinelRef = useRef<HTMLDivElement | null>(null)
-  const [newArticle, setNewArticle] = useState({
-    title: '',
-    summary: '',
-    tags: '',
-    date: new Date().toISOString().split('T')[0],
-  })
 
   const allTags = [...new Set(posts.flatMap((post) => post.tags || []))] as string[]
 
@@ -49,17 +42,6 @@ export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIn
 
     return matchesTag && matchesSearch
   })
-
-  const handleAddArticle = () => {
-    console.log('New article:', newArticle)
-    setNewArticle({
-      title: '',
-      summary: '',
-      tags: '',
-      date: new Date().toISOString().split('T')[0],
-    })
-    setShowAddArticle(false)
-  }
 
   useEffect(() => {
     if (!sentinelRef.current) return
@@ -115,8 +97,8 @@ export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIn
             {/* Filter and Add Article Buttons */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setShowAddArticle(true)}
+                <Link
+                  href="/new"
                   className="bg-primary-500 hover:bg-primary-600 flex items-center gap-2 rounded-lg px-4 py-2 text-white transition-colors"
                 >
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +110,7 @@ export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIn
                     />
                   </svg>
                   <span className="text-sm font-medium">Add Article</span>
-                </button>
+                </Link>
 
                 <button
                   onClick={() => setShowSearch(!showSearch)}
@@ -226,61 +208,6 @@ export default function Home({ posts, startIndex = 0 }: { posts: Post[]; startIn
             )}
           </div>
         </section>
-
-        {showAddArticle && (
-          <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-            <div className="mx-4 w-full max-w-lg rounded-lg bg-white p-6 dark:bg-gray-800">
-              <div className="text-center">
-                <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Have an idea you'd like to share?
-                </h3>
-                <div className="mb-6 space-y-3 text-left text-gray-700 dark:text-gray-300">
-                  <p>
-                    Hey there! If you'd like to contribute an article, here's how to get started:
-                  </p>
-                  <ol className="ml-4 list-inside list-decimal space-y-2">
-                    <li>
-                      Head over to the{' '}
-                      <a
-                        href="https://github.com/Rohith-Shinoj/Deeper-Thoughts-Blog"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary-500 hover:text-primary-600 underline"
-                      >
-                        GitHub repo
-                      </a>
-                    </li>
-                    <li>
-                      Add your content into the template at{' '}
-                      <code className="rounded bg-gray-100 px-1 dark:bg-gray-700">
-                        /data/template.mdx
-                      </code>
-                    </li>
-                    <li>
-                      Update the frontmatter at the top with your details:
-                      <ul className="mt-1 ml-6 list-inside list-disc space-y-1 text-sm">
-                        <li>Your article title, author, date, and summary</li>
-                        <li>Add relevant tags</li>
-                        <li>Include any cool images you want to use</li>
-                      </ul>
-                    </li>
-                    <li>Write your article in Markdown (feel free to get creative!)</li>
-                    <li>
-                      Commit and push your work with a pull request at{' '}
-                      <code className="rounded bg-gray-100 px-1 dark:bg-gray-700">/data/blog</code>!
-                    </li>
-                  </ol>
-                </div>
-                <button
-                  onClick={() => setShowAddArticle(false)}
-                  className="bg-primary-500 hover:bg-primary-600 rounded-md px-6 py-2 text-white transition-colors"
-                >
-                  Sounds great! 👍
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         <section aria-labelledby="latest-posts-heading">
           <h2 id="latest-posts-heading" className="sr-only">

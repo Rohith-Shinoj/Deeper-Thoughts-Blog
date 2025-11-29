@@ -9,8 +9,6 @@ summary: "Deep learning models are often 'black boxes,' making them difficult to
 thumbnail: /static/images/xai/thumbnail.png
 ---
 
-# An Introduction to Explainable AI Methods
-
 Modern artificial intelligence models, particularly deep neural networks, have achieved superhuman performance on a wide range of tasks. Yet, for all their power, they often operate as "black boxes." We can observe their inputs and outputs, but the internal logic that leads from one to the other is buried in millions or even billions of learned parameters. This opacity is a significant barrier to trust, especially in high-stakes domains like medical diagnosis, financial lending, and autonomous vehicles.
 
 Explainable AI (XAI) is a field of research dedicated to piercing this veil. It provides a set of tools and frameworks for understanding and interpreting the predictions of complex models. XAI is not merely an academic pursuit; it is becoming a practical necessity for debugging models, ensuring fairness, complying with regulations, and building human trust. Without it, we are left to simply hope that our powerful models are behaving as intended.
@@ -64,7 +62,7 @@ Gradient-based methods use the internal signals of the neural network itself to 
 
 ### 4. Advanced Gradient-Based Methods: Grad-CAM
 
-Gradient-weighted Class Activation Mapping (Grad-CAM) is a significant refinement of saliency maps, designed specifically for Convolutional Neural Networks (CNNs). It produces smoother, more class-discriminative visualizations.
+Gradient-weighted Class Activation Mapping (Grad-CAM) is a significant refinement of saliency maps, designed specifically for Convolutional Neural Networks (CNNs). It produces smoother, more class-discriminative visualizations. For a detailed guide on visualizing model predictions using techniques like Grad-CAM and Attention Maps, read my article on [Visualizing Model Predictions: Attention Maps & Grad-CAM](./visualizing-model-predictions-attention-maps-gradcam).
 
 - **Process:** Grad-CAM uses the gradients flowing into the final convolutional layer of a CNN. These gradients are used to weight the activation maps from that layer. A weighted combination of these maps, followed by a ReLU activation, produces a coarse heatmap of the "important" regions for a specific class.
 - **Result:** A localized heatmap that clearly shows the parts of the image the model focused on to make its prediction for a particular class.

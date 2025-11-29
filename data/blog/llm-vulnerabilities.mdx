@@ -21,7 +21,7 @@ Beyond input manipulation, LLMs face risks related to their training data and mo
 
 ## The Threat of Prompt Injection and Jailbreaking
 
-One of the most immediate attacks is **prompt injection**, where malicious input is crafted to override an LLM’s intended instructions. This attack is particularly dangerous because it can lead to unauthorized access to sensitive data, such as passwords or API keys, which can be used to gain unauthorized access to systems or networks. The ultimate form of this attack is known as **jailbreaking** – feeding prompts that cause the model to throw out all its safety rules and “disregard its safety protocols entirely”
+One of the most immediate attacks is **prompt injection**, where malicious input is crafted to override an LLM’s intended instructions. For a deeper dive into how this specific vulnerability can be weaponized into "AI malware," read my article on [PromptLock: The AI Malware](./promptlock-the-ai-malware). This attack is particularly dangerous because it can lead to unauthorized access to sensitive data, such as passwords or API keys, which can be used to gain unauthorized access to systems or networks. The ultimate form of this attack is known as **jailbreaking** – feeding prompts that cause the model to throw out all its safety rules and “disregard its safety protocols entirely”
 
 ![Prompt Injection](/static/images/llm_vulnerabilities/prompt-injection.png)
 
@@ -29,7 +29,7 @@ In the above figure, an attacker tells an AI assistant “Ignore previous instru
 
 ## Data Leakage, Hallucinations, and Misinformation
 
-LLMs can also leak information or invent falsehoods. **Data leakage** occurs when the model inadvertently reveals sensitive or confidential data it learned during training. For example, if the training set contained private records or proprietary algorithms, a careless query might retrieve them. In practice, this means anything from personal IDs to secret keys can unintentionally slip out unless we scrub and protect the training data.
+LLMs can also leak information or invent falsehoods. **Data leakage** occurs when the model inadvertently reveals sensitive or confidential data it learned during training. For example, if the training set contained private records or proprietary algorithms, a careless query might retrieve them. In practice, this means anything from personal IDs to secret keys can unintentionally slip out unless we scrub and protect the training data. To understand techniques for removing unwanted information from trained models, read my article on [Machine Unlearning](./machine-unlearning).
 
 Even without leaking real secrets, LLMs frequently produce **hallucinations** – plausible-sounding but false statements. In other words, the model produces false or misleading information that appears credible. Hallucinations happen because the model fills gaps with statistical guesses, not factual knowledge. As the **_Open Worldwide Application Security Project (OWASP)_** explains, an LLM might “generate content that seems accurate but is fabricated” by “filling gaps in its training data using statistical patterns”.
 

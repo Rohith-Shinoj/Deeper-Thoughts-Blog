@@ -9,9 +9,7 @@ summary: 'For years, the Transformer has been the undisputed king of AI architec
 thumbnail: /static/images/ssm/thumbnail.png
 ---
 
-# Beyond Transformers: The Rise of State Space Models
-
-Since its introduction in 2017, the Transformer architecture has been the driving force behind the modern AI revolution. Its self-attention mechanism, which allows every token in a sequence to look at every other token, proved to be exceptionally powerful for understanding context in language. However, this power comes at a steep price: the computational and memory cost of self-attention grows quadratically with the length of the sequence (`O(N²)`). This has created a significant bottleneck, making it incredibly expensive to process very long documents, high-resolution images, or genomic data.
+Since its introduction in 2017, the Transformer architecture has been the driving force behind the modern AI revolution. Its self-attention mechanism, which allows every token in a sequence to look at every other token, proved to be exceptionally powerful for understanding context in language. For a deeper analysis of this mechanism, read my article on ["Beyond Attention"](./beyond-attention). However, this power comes at a steep price: the computational and memory cost of self-attention grows quadratically with the length of the sequence (`O(N²)`). This has created a significant bottleneck, making it incredibly expensive to process very long documents, high-resolution images, or genomic data.
 
 For years, researchers have sought a successor—an architecture that could match the Transformer's performance without its quadratic scaling problem. A leading contender has now emerged from an unlikely source: classical control theory. State Space Models (SSMs) are making a dramatic entrance into the world of deep learning, promising linear-time complexity (`O(N)`) and highly efficient inference, challenging the Transformer's long-held dominance.
 
