@@ -46,6 +46,9 @@ yarn-error.log*
 # Contentlayer
 .contentlayer
 
-# Gemini CLI related files
 .github/*\n# NextAuth.js
-.env.local
+
+# Gemini files
+.github/workflows/gemini-*
+GEMINI.md
+
