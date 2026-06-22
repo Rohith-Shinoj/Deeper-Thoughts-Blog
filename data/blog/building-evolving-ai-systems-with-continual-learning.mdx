@@ -1,0 +1,84 @@
+---
+title: 'Building Evolving AI Systems with Continual Learning'
+date: '2026-01-18'
+lastmod: '2026-01-18'
+authors: ['default']
+tags: ['Continual Learning', 'Lifelong Learning', 'Catastrophic Forgetting', 'AI Plasticity']
+draft: false
+summary: 'Humans learn new things without forgetting the old. AI models usually cant. This article dives into Continual Learning, the quest to build evolving AI. We will explore the critical problem of catastrophic forgetting and the architectural, regularization, and replay methods designed to overcome it.'
+thumbnail: /static/images/continual-learning/thumbnail.png
+---
+
+Humans have a remarkable ability to learn continuously. We learn to walk, then to run, then to ride a bicycle. Learning a new skill doesn't erase our ability to perform the old ones. We accumulate knowledge throughout our lives. Artificial neural networks, for all their power, have a notoriously bad memory in this regard. They are typically trained in a "batch" paradigm on a static dataset, learning everything at once. If you take a model trained to classify cats and dogs and then try to train it to classify birds and fish, you'll find a strange and frustrating result: it will become an expert on birds and fish, but it will have almost completely forgotten what a cat or a dog is.
+
+This phenomenon is known as **catastrophic forgetting**, and it's one of the biggest obstacles standing in the way of truly intelligent, adaptive AI. The quest to solve this problem is the domain of **Continual Learning (CL)**, also known as Lifelong Learning. It's the pursuit of building AI systems that can learn incrementally from a continuous stream of data, integrating new knowledge while preserving the old.
+
+<TOCInline toc={props.toc} exclude="Introduction" />
+
+## The Core Problem: Catastrophic Forgetting
+
+Catastrophic forgetting is the tendency of an artificial neural network to abruptly and completely forget previously learned information upon learning new information. From a technical perspective, it occurs because of how networks are trained via gradient descent.
+
+When a model is trained on Task A (e.g., distinguishing cats from dogs), its weights are optimized to minimize loss on the data distribution of Task A. The resulting weight configuration is a point in a high-dimensional parameter space that is highly specialized for that task. When we introduce Task B (e.g., distinguishing birds from fish), the new training data comes from a different distribution. The gradient updates are calculated solely to minimize the loss on Task B. These updates will, with no regard for Task A, push the model's weights to a new configuration that is optimal for Task B, but is almost certainly terrible for Task A. The knowledge of Task A is not gently overwritten; it is effectively destroyed.
+
+![A graph showing performance on Task A plummeting as a model is trained sequentially on Task B, then Task C.](https://i.imgur.com/G5g2m6p.png 'Illustration of Catastrophic Forgetting')
+
+## Overcoming Forgetting: The Three Core Strategies
+
+The field of Continual Learning has developed three main families of strategies to mitigate catastrophic forgetting.
+
+### 1. Regularization-Based Methods
+
+This approach modifies the learning process itself. The core idea is to add a regularization term to the loss function that penalizes changes to the weights deemed most important for previous tasks.
+
+The most famous example is **Elastic Weight Consolidation (EWC)**.
+
+- **How it works:** After training on Task A, EWC computes the importance of each weight with respect to that task (approximated by the diagonal of the Fisher Information Matrix). When the model begins training on Task B, the EWC loss term acts like a set of "elastic springs" on the weights. The most important weights for Task A are attached to stronger springs, making them harder to change, while less important weights are freer to move to accommodate the new task.
+
+The EWC loss is roughly:
+$$ L*B(\theta) + \sum_i \frac{\lambda}{2} F_i (\theta_i - \theta*{A,i}^_)^2 $$
+Where $L_B$ is the loss for Task B, $\lambda$ is a hyperparameter, $F_i$ is the calculated importance of weight $i$ for Task A, and $(\theta*i - \theta*{A,i}^_)$ is the change in the weight from its optimal value for Task A.
+
+### 2. Replay-Based (Rehearsal) Methods
+
+This is arguably the most intuitive and often the most effective strategy. The idea is simple: to remember old things, you should practice them. Replay methods store a small subset of data from previous tasks in a "memory buffer."
+
+- **How it works:** When the model is training on new data from Task C, the training batch isn't just composed of Task C examples. It's a mixture of new data and a small number of old examples sampled from the memory buffer (e.g., from Task A and Task B). By "rehearsing" with this old data, the model is constantly reminded of previous tasks, and the gradient updates are forced to find a solution that performs well on both the new and old data distributions.
+
+  ![A diagram showing a memory buffer of old data being mixed with new data for training.](https://i.imgur.com/vB1L7nB.png 'Replay-Based Continual Learning')
+
+- **The Catch:** This method requires storing old data, which isn't always feasible due to memory constraints or, more importantly, data privacy regulations (a problem that connects to the principles of [Federated Learning](./federated-learning-for-privacy-preserving-model-training)). A more advanced technique called **Generative Replay** attempts to solve this by training a generative model to produce synthetic data that resembles the old data, avoiding the need to store it directly.
+
+### 3. Architecture-Based Methods
+
+This family of methods tackles the problem by changing the model's architecture itself as it learns new tasks. Instead of forcing new knowledge into the same set of parameters, the model grows or adapts to accommodate it.
+
+- **How it works:** A common approach is to dynamically expand the network. When a new task is introduced, new neurons or entire network "columns" can be allocated specifically for that task. The parameters corresponding to old tasks can then be "frozen" or updated with a much smaller learning rate, protecting them from being overwritten. For example, in a "PackNet" approach, the model is pruned after learning a task to free up parameters, which are then used to learn the next task.
+
+- **The Trade-off:** While this provides a very clean separation of knowledge and can be highly effective at preventing forgetting, it has an obvious downside: the model's size grows with each new task, which may be unsustainable in the long run.
+
+## The Continual Learning Trilemma
+
+The development of CL methods is governed by a fundamental "trilemma"—a trade-off between three competing goals:
+
+1.  **Performance:** Achieving high accuracy on both new and old tasks.
+2.  **Memory:** Minimizing the amount of data from past tasks that needs to be stored.
+3.  **Compute:** Limiting the computational overhead required by the continual learning mechanism.
+
+Most methods make a trade-off. Replay-based methods often have the best performance but require the most memory. Regularization-based methods like EWC are memory-efficient but may not perform as well. Architectural methods can perform well but at the cost of ever-increasing model size and compute.
+
+## Conclusion: Towards Truly Adaptive AI
+
+Continual Learning is a critical frontier in AI research. It directly confronts one of the most glaring weaknesses of modern deep learning and pushes us to build models that are more dynamic, adaptable, and robust over time. While the perfect, universal solution to catastrophic forgetting remains elusive, the progress in regularization, replay, and architectural strategies is paving the way for AI systems that don't just learn once, but can continue to learn, adapt, and grow throughout their entire lifecycle—much like we do.
+
+---
+
+### Further Reading
+
+1. [Overcoming catastrophic forgetting in neural networks (EWC Paper)](https://www.pnas.org/doi/10.1073/pnas.1611835114)
+2. [A comprehensive survey of continual learning: Theory, methods and applications](https://arxiv.org/abs/2302.00433)
+3. [Three scenarios for continual learning](https://arxiv.org/abs/1904.07734)
+
+---
+
+_Enjoyed this post? <a href="https://deeper-thoughts-blog.rohithshinoj.com#newsletter" target="_self">Subscribe to the Newsletter</a> for more deep dives into ML infrastructure, interpretibility, and applied AI engineering or check out other posts at <a href="https://deeper-thoughts-blog.rohithshinoj.com" target="_self">Deeper Thoughts</a>_

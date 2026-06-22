@@ -1,5 +1,6 @@
 import { defineDocumentType, ComputedFields, makeSource } from 'contentlayer2/source-files'
 import { writeFileSync } from 'fs'
+import { execSync } from 'child_process'
 import readingTime from 'reading-time'
 import { slug } from 'github-slugger'
 import path from 'path'
@@ -204,5 +205,7 @@ export default makeSource({
     const { allBlogs } = await importData()
     createTagCount(allBlogs)
     createSearchIndex(allBlogs)
+    // Generate the blog manifest
+    execSync('node scripts/generate-blog-manifest.mjs', { stdio: 'inherit' })
   },
 })

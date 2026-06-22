@@ -1,7 +1,6 @@
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
-import { allBlogs } from 'contentlayer/generated'
 import { genPageMetadata } from 'app/seo'
 import ListLayout from '@/layouts/ListLayoutWithTags'
+import manifest from '../blog-manifest.json'
 
 const POSTS_PER_PAGE = 5
 
@@ -21,13 +20,18 @@ export const metadata = genPageMetadata({
 })
 
 export default async function BlogPage(props: { searchParams: Promise<{ page: string }> }) {
-  const posts = allCoreContent(sortPosts(allBlogs.filter((p) => p.slug !== '_template')))
-  const pageNumber = 1
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE)
-  const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE * pageNumber)
+  const searchParams = await props.searchParams
+  const pageNumber = parseInt(searchParams.page) || 1
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const posts = manifest as any
+
+  const initialDisplayPosts = posts.slice(
+    POSTS_PER_PAGE * (pageNumber - 1),
+    POSTS_PER_PAGE * pageNumber
+  )
   const pagination = {
     currentPage: pageNumber,
-    totalPages: totalPages,
+    totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
   }
 
   return (
