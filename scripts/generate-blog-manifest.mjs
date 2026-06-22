@@ -13,6 +13,9 @@ async function generateBlogManifest() {
       date: post.date,
       summary: post.summary,
       tags: post.tags,
+      thumbnail: post.thumbnail,
+      images: post.images,
+      readingTime: post.readingTime,
     }
   })
 
